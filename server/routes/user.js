@@ -9,7 +9,10 @@ const {
   deleteUser,
 } = require("../controllers/user");
 
-router.route("/").get(getUsers).post(createUser);
+router
+  .route("/")
+  .get(getUsers)
+  .post(createUser);
 
 router
   .route("/:id")

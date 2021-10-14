@@ -30,19 +30,19 @@ const getUsers = async (req, res) => {
   }
 };
 
-const getUser = async (req, res, next) => {
+const getUser = async (req, res) => {
   let user;
   try {
     user = await User.findById(req.params.id);
     if (user == null) {
       return res.status(404).json({ message: "User not found" });
     }
+    res.json(user);
   } catch (error) {
-    return res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
   //   res.user = user;
   //   next();
-  res.json(user);
 };
 
 // const getUser = async (req, res) => {
@@ -51,10 +51,13 @@ const getUser = async (req, res, next) => {
 
 const updateUser = async (req, res) => {
   const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id))
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).send(`No user with id: ${id}`);
+  }
+
   const { userType, firstName, lastName, userName, mail, password } = req.body;
   const user = new User({
+    _id: id,
     userType,
     firstName,
     lastName,
@@ -62,6 +65,7 @@ const updateUser = async (req, res) => {
     mail,
     password,
   });
+  
   try {
     const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
     res.json(updatedUser);
@@ -72,8 +76,10 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id))
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).send(`No user with id: ${id}`);
+  }
+
   try {
     await User.findByIdAndRemove(id);
     res.json({ message: "User deleted successfully" });
