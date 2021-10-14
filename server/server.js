@@ -16,6 +16,9 @@ app.use(express.json());
 const userRouter = require("./routes/user")
 app.use('/users', userRouter)
 
+const quizRouter = require("./routes/quiz");
+app.use("/quizes", quizRouter);
+
 app.listen(process.env.PORT, () =>
   console.log(`Server started on port ${process.env.PORT}`)
 );
