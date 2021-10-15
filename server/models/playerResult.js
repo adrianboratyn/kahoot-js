@@ -9,27 +9,30 @@ const playerResultSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Game",
   },
-  score: { type: Number },
+  quizId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Quiz",
+  },
+  score: {
+    type: Number,
+    default: 0,
+  },
   answers: [
     {
-      questionId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Question",
+      questionIndex: { type: Number },
+      answered: {
+        type: Boolean,
+        default: false,
       },
       answerIndex: { type: Number },
       correctAnswerIndex: { type: Number },
       time: { type: Number },
+      points: {
+        type: Number,
+        default: 0,
+      },
     },
   ],
-  //   answerTimeDict: [
-  //     {
-  //       questionId: {
-  //         type: mongoose.Schema.Types.ObjectId,
-  //         ref: "Question",
-  //       },
-  //       time: { type: Number },
-  //     },
-  //   ],
 });
 
 module.exports = mongoose.model("PlayerResult", playerResultSchema);

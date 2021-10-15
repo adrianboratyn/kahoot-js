@@ -9,6 +9,13 @@ const gameSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Quiz",
   },
+  pin: {
+    type: Number,
+  },
+  isLive: {
+    type: Boolean,
+    default: false,
+  },
   playerList: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -20,12 +27,12 @@ const gameSchema = new mongoose.Schema({
     required: true,
     default: Date.now,
   },
-  //raczej niepotrzebne
-  //currentQuestion: { type: Integer },
-  groupResult: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "GroupResult",
-  },
+  playerResultList: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PlayerResult",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Game", gameSchema);
