@@ -1,4 +1,3 @@
-const express = require("express");
 const mongoose = require("mongoose");
 const User = require("../models/user");
 
@@ -41,13 +40,7 @@ const getUser = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-  //   res.user = user;
-  //   next();
 };
-
-// const getUser = async (req, res) => {
-//   res.json(res.user);
-// }
 
 const updateUser = async (req, res) => {
   const { id } = req.params;
