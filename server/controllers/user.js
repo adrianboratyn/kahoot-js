@@ -1,15 +1,20 @@
 const mongoose = require("mongoose");
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 const createUser = async (req, res) => {
   const { userType, firstName, lastName, userName, mail, password } = req.body;
+  const salt = await bcrypt.genSalt()
+  const hashedPassword = await bcrypt.hash(password, salt)
+  console.log(salt)
+  console.log(hashedPassword)
   const user = new User({
     userType,
     firstName,
     lastName,
     userName,
     mail,
-    password,
+    password: hashedPassword,
   });
 
   try {
@@ -19,6 +24,25 @@ const createUser = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+const login = async (req, res) => {
+  const user = await User.findOne({userName: req.body.userName})
+  //console.log(user);
+  if(user == null){
+    return res.status(400).send('Cannot find user')
+  }
+  console.log(req.body.password);
+  console.log(user.password);
+  try{
+    if(await bcrypt.compare(req.body.password, user.password)){
+      res.send("Succes")
+    } else{
+      res.send("Not allowed")
+    }
+  } catch(error){
+    res.status(500).json({message: error.message})
+  }
+}
 
 const getUsers = async (req, res) => {
   try {
@@ -58,7 +82,7 @@ const updateUser = async (req, res) => {
     mail,
     password,
   });
-  
+
   try {
     const updatedUser = await User.findByIdAndUpdate(id, user, { new: true });
     res.json(updatedUser);
@@ -81,4 +105,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getUsers, getUser, updateUser, deleteUser };
+module.exports = { createUser, getUsers, getUser, updateUser, deleteUser, login };
