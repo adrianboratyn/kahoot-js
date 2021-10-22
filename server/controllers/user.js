@@ -25,25 +25,6 @@ const createUser = async (req, res) => {
   }
 };
 
-const login = async (req, res) => {
-  const user = await User.findOne({userName: req.body.userName})
-  //console.log(user);
-  if(user == null){
-    return res.status(400).send('Cannot find user')
-  }
-  console.log(req.body.password);
-  console.log(user.password);
-  try{
-    if(await bcrypt.compare(req.body.password, user.password)){
-      res.send("Succes")
-    } else{
-      res.send("Not allowed")
-    }
-  } catch(error){
-    res.status(500).json({message: error.message})
-  }
-}
-
 const getUsers = async (req, res) => {
   try {
     const users = await User.find();
@@ -105,4 +86,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getUsers, getUser, updateUser, deleteUser, login };
+module.exports = { createUser, getUsers, getUser, updateUser, deleteUser };

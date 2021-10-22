@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 
 const app = express();
 
+const {authenticateToken} = require('./middleware/auth')
+
 mongoose.connect(process.env.DATABASE_URL);
 
 const db = mongoose.connection;
@@ -12,6 +14,7 @@ db.on("error", (error) => console.error(error));
 db.once("open", () => console.log("Connected to database"));
 
 app.use(express.json());
+app.use(authenticateToken)
 
 const userRouter = require("./routes/user")
 app.use('/users', userRouter)
@@ -28,3 +31,4 @@ app.use('/playerResults', playerResultRouter)
 app.listen(process.env.PORT, () =>
   console.log(`Server started on port ${process.env.PORT}`)
 );
+
