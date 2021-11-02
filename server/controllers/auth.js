@@ -7,18 +7,25 @@ const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
   const user = await User.findOne({ userName: req.body.userName });
-  console.log(user);
   if (user == null) {
     return res.status(400).send("Cannot find user");
   }
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
-      const accessToken = generateAccessToken(user.toJSON())
+      const accessToken = generateAccessToken({
+        userName: user.userName,
+        id: user._id,
+      });
       const refreshToken = jwt.sign(
-        user.toJSON(),
-        process.env.REFRESH_TOKEN_SECRET, {expiresIn: '2h'}
+        { userName: user.userName, id: user._id },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "2h" }
       );
-      res.json({ accessToken: accessToken, refreshToken: refreshToken });
+      res.json({
+        result: user,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      });
     } else {
       res.send("Not allowed");
     }
@@ -27,32 +34,58 @@ const login = async (req, res) => {
   }
 };
 
-const generateAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "25s",
+const register = async (req, res) => {
+  const {
+    userType,
+    firstName,
+    lastName,
+    userName,
+    mail,
+    password,
+    confirmPassword,
+  } = req.body;
+  const existingEmail = await User.findOne({ mail });
+  const existingUserName = await User.findOne({ userName });
+
+  if (existingEmail || existingUserName) {
+    return res.status(400).json({ message: "User already exists." });
+  }
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: "Passwords don't match" });
+  }
+
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(password, salt);
+  const user = new User({
+    userType,
+    firstName,
+    lastName,
+    userName,
+    mail,
+    password: hashedPassword,
+  });
+
+  try {
+    const newUser = await user.save();
+    const accessToken = generateAccessToken({
+      userName: user.userName,
+      id: user._id,
+    });
+    const refreshToken = jwt.sign(
+      { userName: user.userName, id: user._id },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "2h" }
+    );
+    res.status(201).json({ result: newUser, accessToken: accessToken });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const generateAccessToken = (userData) => {
+  return jwt.sign(userData, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "25m",
   });
 };
 
-//to do middleware
-const regenerateAccessToken = (req, res) => {
-    const refreshToken = req.body.token
-    if(refreshToken == null) return res.sendStatus(401)
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (error, user) => {
-        if (error) {
-            console.log(error);
-            return res.sendStatus(403);
-        }
-      const accessToken = generateAccessToken({userName: user.userName})
-      res.json({accessToken: accessToken})
-    });
-}
-
-const logout = (req, res) => {
-    // const authHeader = req.headers["authorization"];
-    // const token = authHeader && authHeader.split(" ")[1];
-    // if (token == null) return res.sendStatus(401);
-    // const refreshToken = jwt.sign(token, "", {expiresIn: "1s"})
-    // res.send(refreshToken)
-}
-
-module.exports = { login, regenerateAccessToken, logout };
+module.exports = { login, register };

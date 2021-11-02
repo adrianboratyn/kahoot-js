@@ -6,7 +6,15 @@ const cors = require("cors");
 
 const app = express();
 
-const { authenticateToken } = require("./middleware/auth");
+const {
+  authenticateToken,
+  regenerateAccessToken,
+} = require("./middleware/auth");
+
+const userRouter = require("./routes/user");
+const quizRouter = require("./routes/quiz");
+const gameRouter = require("./routes/game");
+const playerResultRouter = require("./routes/playerResult");
 
 mongoose.connect(process.env.DATABASE_URL);
 
@@ -16,18 +24,13 @@ db.once("open", () => console.log("Connected to database"));
 
 app.use(express.json());
 app.use(cors());
-app.use(authenticateToken)
+app.use(authenticateToken);
+app.use(regenerateAccessToken);
 
-const userRouter = require("./routes/user");
+
 app.use("/users", userRouter);
-
-const quizRouter = require("./routes/quiz");
 app.use("/quizes", quizRouter);
-
-const gameRouter = require("./routes/game");
 app.use("/games", gameRouter);
-
-const playerResultRouter = require("./routes/playerResult");
 app.use("/playerResults", playerResultRouter);
 
 app.listen(process.env.PORT, () =>
