@@ -6,7 +6,7 @@
 
 body {
   font-family: Montserrat, sans-serif;
-  padding-top: 60px;
+  padding-top: 6vh;
 }
 
 /* NAVBAR */
@@ -16,7 +16,7 @@ body {
   width: 100vw;
   z-index: 2;
   background: #fff;
-  height: 60px;
+  height: 6vh;
   box-shadow: 0 0 10px #80838b;
   display: flex;
   justify-content: space-between;
@@ -321,3 +321,80 @@ main .page {
 }
 
 /* FOOTER */
+
+.footer{
+  background-color: #24262b;
+  padding: 50px 0;
+  margin-top: 70px;
+}
+
+.footer-row{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.footer-column{
+  width: 25%;
+  padding: 0 15px;
+}
+
+.footer-column h4{
+  font-size: 18px;
+  color: white;
+  text-transform: capitalize;
+  margin-bottom: 20px;
+  font-weight: 500;
+  position: relative;
+}
+
+.footer-column h4::before{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  height: 2px;
+  width: 50px;
+  background-color: #e91e63;
+}
+
+.footer-column ul li{
+  line-height: 1.5;
+  list-style-type: none;
+}
+
+.footer-column ul li:not(:last-child){
+  margin-bottom: 10px;
+}
+
+.footer-column ul li a{
+  font-size: 16px;
+  text-transform: capitalize;
+  color: #bbbbbb;
+  text-decoration: none;
+  font-weight: 300;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.footer-column ul li a:hover{
+  color: #ffffff;
+  padding-left: 10px;
+}
+
+.footer-social-links a{
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  background-color: rgba(255,255,255, 0.2);
+  margin: 0 10px 10px 0;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 50%;
+  color: #ffffff;
+  transition: all 0.5s ease;
+}
+
+.footer-social-links a:hover{
+  color: #24262b;
+  background-color: #ffffff;
+}
