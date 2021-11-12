@@ -34,7 +34,11 @@ function Navbar() {
           <ul className={styles.nav__list}>
             <li className={styles["nav__list-logo"]}>
               <div component={Link} to="/" className={styles["logo-link"]}>
-                <img src="logo.jpg" alt="logo" className={styles["logo-img"]} />
+                <img
+                  src="../../images/car1.jpg"
+                  alt="logo"
+                  className={styles["logo-img"]}
+                />
               </div>
             </li>
             <li className={styles["nav__list-item"]}>
@@ -58,20 +62,20 @@ function Navbar() {
             <li className={styles["nav__list-item"]}>Contact</li>
             <li className={styles["nav__list-item"]}>Play</li>
             {user ? (
-              <li className={styles["nav__list-item"]}>
-                <h3>{user.result.firstName}</h3>
-                <button onClick={logout} className={styles["nav__list-item"]}>
+              <>
+                <li>{user.result.firstName}</li>
+                <li onClick={logout} className={styles["nav__list-item"]}>
                   Log out
-                </button>
-              </li>
+                </li>
+              </>
             ) : (
-              <button
+              <li
                 component={Link}
                 to="/auth"
                 className={styles["nav__list-item"]}
               >
                 Log in
-              </button>
+              </li>
             )}
             <li className={styles["nav__list-item"]}>
               EN

@@ -1,5 +1,10 @@
 import React from "react";
 import styles from "./home.module.css";
+import img1 from '../../assets/img1.jpeg'
+import img2 from '../../assets/img2.jpeg'
+import img3 from '../../assets/img3.svg'
+import img4 from '../../assets/img4.svg'
+import img5 from '../../assets/img5.svg'
 
 function Home() {
   return (
@@ -16,7 +21,7 @@ function Home() {
                 <a href="/">Sign up for free</a>
               </button>
             </div>
-            <img src="img1.jpeg" alt="" className={styles["banner-image"]} />
+            <img src={img1} alt="" className={styles["banner-image"]} />
           </div>
           <div className={styles.banner}>
             <div className={styles["banner-body"]}>
@@ -29,7 +34,7 @@ function Home() {
                 <a href="/">Check public quizes</a>
               </button>
             </div>
-            <img src="img2.jpeg" alt="" className={styles["banner-image"]} />
+            <img src={img2} alt="" className={styles["banner-image"]} />
           </div>
         </section>
         <section className={styles["second-section"]}>
@@ -73,7 +78,7 @@ function Home() {
           <h1>How does Quizzly work?</h1>
           <div className={styles["card-container"]}>
             <div className={styles.card}>
-              <img src="img3.svg" alt="" />
+              <img src={img3} alt="" />
               <div className={styles["card-body"]}>
                 <h1>Create</h1>
                 <p>
@@ -83,7 +88,7 @@ function Home() {
               </div>
             </div>
             <div className={styles.card}>
-              <img src="img4.svg" alt="" />
+              <img src={img4} alt="" />
               <div className={styles["card-body"]}>
                 <h1>Host or share</h1>
                 <p>
@@ -93,7 +98,7 @@ function Home() {
               </div>
             </div>
             <div className={styles.card}>
-              <img src="img5.svg" alt="" />
+              <img src={img5} alt="" />
               <div className={styles["card-body"]}>
                 <h1>Play</h1>
                 <p>

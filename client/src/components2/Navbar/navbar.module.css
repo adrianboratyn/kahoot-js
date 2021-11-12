@@ -1,3 +1,21 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* html {
+  min-height: 100vh;
+} */
+
+body {
+  font-family: Montserrat, sans-serif;
+  padding-top: 6vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .nav {
   position: fixed;
   top: 0;
