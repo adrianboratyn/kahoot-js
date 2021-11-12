@@ -84,26 +84,42 @@ const updatePlayerResult = async (req, res) => {
 
 const addAnswer = async (req, res) => {
   const { playerResultId } = req.params;
-  const { questionIndex, answered, answerIndex, time } = req.body;
+  const { questionIndex, answered, answers, time } = req.body;
 
   let playerResult;
   let quiz;
-  let correctAnswerIndex;
+  let correctAnswers;
+  let pointType;
+  let answerTime;
   let points = 0;
   try {
     playerResult = await PlayerResult.findById(playerResultId);
     quiz = await Quiz.findById(playerResult.quizId);
-    correctAnswerIndex = quiz.questionList[questionIndex].correctAnswer;
-    if (answered && answerIndex === correctAnswerIndex) {
-      points = calculatePoints(quiz, time);
+    correctAnswers = quiz.questionList[questionIndex].correctAnswersList;
+    pointType = quiz.questionList[questionIndex].pointType;
+    answerTime = quiz.questionList[questionIndex].answerTime;
+    let a = 0
+    for (let i = 0; i < correctAnswers.length; i++) {
+      if (
+        correctAnswers[i].name === answers[i].name &&
+        correctAnswers[i].body === answers[i].body
+      ) {
+        a++
+      }
     }
+    if(a === correctAnswers.length){
+      points = calculatePoints(quiz, time, pointType, answerTime);
+    }
+    // if (answered && answerIndex === correctAnswerIndex) {
+    //   points = calculatePoints(quiz, time);
+    // }
     playerResult.score += points;
     playerResult.answers.push({
       questionIndex,
       answered,
-      answerIndex,
+      answers,
       time,
-      correctAnswerIndex,
+      correctAnswers,
       points,
     });
     const updatedPlayerResult = await playerResult.save();
@@ -215,10 +231,10 @@ const updateAnswer = async (req, res) => {
   }
 };
 
-const calculatePoints = (quiz, time) => {
-  let pointType = quiz.pointType;
+const calculatePoints = (quiz, time, pointType, answerTime) => {
+  //let pointType = quiz.pointType;
   let pointsPerQuestion = quiz.pointsPerQuestion;
-  let answerTime = quiz.answerTime;
+  //let answerTime = quiz.answerTime;
   if (pointType === "Double") {
     return pointsPerQuestion * 2;
   } else if (pointType === "BasedOnTime") {

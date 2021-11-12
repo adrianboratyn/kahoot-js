@@ -2,21 +2,15 @@ const mongoose = require("mongoose");
 const Quiz = require("../models/quiz");
 
 const createQuiz = async (req, res) => {
-  const {
-    name,
-    description,
-    creatorId,
-    pointType,
-    pointsPerQuestion,
-    answerTime,
-  } = req.body;
+  const { name, backgroundImage, description, creatorId, pointsPerQuestion, questionList } =
+    req.body;
   const quiz = new Quiz({
     name,
+    backgroundImage,
     description,
     creatorId,
-    pointType,
     pointsPerQuestion,
-    answerTime,
+    questionList
   });
 
   try {
@@ -69,22 +63,13 @@ const updateQuiz = async (req, res) => {
     return res.status(404).send(`No quiz with id: ${id}`);
   }
 
-  const {
-    name,
-    description,
-    creatorId,
-    pointType,
-    pointsPerQuestion,
-    answerTime,
-  } = req.body;
+  const { name, description, creatorId, pointsPerQuestion } = req.body;
   const quiz = new Quiz({
     _id: id,
     name,
     description,
     creatorId,
-    pointType,
     pointsPerQuestion,
-    answerTime,
   });
 
   try {
@@ -97,7 +82,14 @@ const updateQuiz = async (req, res) => {
 
 const addQuestion = async (req, res) => {
   const { quizId } = req.params;
-  const { questionType, question, answerList, correctAnswer } = req.body;
+  const {
+    questionType,
+    question,
+    pointType,
+    answerTime,
+    answerList,
+    correctAnswersList,
+  } = req.body;
   let quiz;
   try {
     quiz = await Quiz.findById(quizId);
@@ -107,8 +99,10 @@ const addQuestion = async (req, res) => {
     quiz.questionList.push({
       questionType,
       question,
+      pointType,
+      answerTime,
       answerList,
-      correctAnswer,
+      correctAnswersList,
     });
     quiz.numberOfQuestions += 1;
     const updatedQuiz = await quiz.save();
@@ -179,7 +173,14 @@ const updateQuestion = async (req, res) => {
     return res.status(404).send(`No question with id: ${questionId}`);
   }
 
-  const { questionType, question, answerList, correctAnswer } = req.body;
+  const {
+    questionType,
+    question,
+    pointType,
+    answerTime,
+    answerList,
+    correctAnswersList,
+  } = req.body;
   let quiz;
 
   try {
@@ -194,8 +195,11 @@ const updateQuestion = async (req, res) => {
       _id: questionId,
       questionType,
       question,
+      pointType,
+      answerTime,
       answerList,
       correctAnswer,
+      correctAnswersList,
     };
     const updatedQuiz = await Quiz.findByIdAndUpdate(quizId, quiz, {
       new: true,

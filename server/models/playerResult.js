@@ -24,8 +24,18 @@ const playerResultSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
       },
-      answerIndex: { type: Number },
-      correctAnswerIndex: { type: Number },
+      answers: [
+        {
+          name: { type: String },
+          body: { type: String },
+        },
+      ],
+      correctAnswers: [
+        {
+          name: { type: String },
+          body: { type: String },
+        },
+      ],
       time: { type: Number },
       points: {
         type: Number,
