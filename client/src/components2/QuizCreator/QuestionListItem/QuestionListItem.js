@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./questionListItem.module.css";
+import img1 from "../../../assets/img1.jpeg";
 
 function QuestionListItem({number, type, name, time, image}) {
   return (
@@ -30,7 +31,8 @@ function QuestionListItem({number, type, name, time, image}) {
               ></path>
             </svg>
           ) : (
-            <img src={image} alt="" />
+            // <img src={image} alt="" />
+            <img src={img1} alt="" />
           )}
         </div>
         <div className={styles["question-preview-answers"]}>
