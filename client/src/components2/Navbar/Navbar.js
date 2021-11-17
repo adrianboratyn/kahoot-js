@@ -1,31 +1,31 @@
-import React, { useState, useEffect } from "react";
-import styles from "./navbar.module.css";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import decode from "jwt-decode";
-import * as actionType from "../../constants/actionTypes";
+import React, { useState, useEffect } from "react"
+import styles from "./navbar.module.css"
+import { Link, useHistory, useLocation } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import decode from "jwt-decode"
+import * as actionType from "../../constants/actionTypes"
 
 function Navbar() {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const history = useHistory();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")))
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const history = useHistory()
 
   const logout = () => {
-    dispatch({ type: actionType.LOGOUT });
-    history.push("/auth");
-    setUser(null);
-  };
+    dispatch({ type: actionType.LOGOUT })
+    history.push("/auth")
+    setUser(null)
+  }
 
   useEffect(() => {
-    const token = user?.accessToken;
+    const token = user?.accessToken
     if (token) {
-      const decodedToken = decode(token);
+      const decodedToken = decode(token)
 
-      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout()
     }
-    setUser(JSON.parse(localStorage.getItem("profile")));
-  }, [location]);
+    setUser(JSON.parse(localStorage.getItem("profile")))
+  }, [location])
 
   return (
     <header>
@@ -33,13 +33,9 @@ function Navbar() {
         <div className={styles["menu-right"]}>
           <ul className={styles.nav__list}>
             <li className={styles["nav__list-logo"]}>
-              <div component={Link} to="/" className={styles["logo-link"]}>
-                <img
-                  src="../../images/car1.jpg"
-                  alt="logo"
-                  className={styles["logo-img"]}
-                />
-              </div>
+              <Link to="/" className={styles["logo-link"]}>
+                <img src="" alt="logo" className={styles["logo-img"]} />
+              </Link>
             </li>
             <li className={styles["nav__list-item"]}>
               About
@@ -63,19 +59,17 @@ function Navbar() {
             <li className={styles["nav__list-item"]}>Play</li>
             {user ? (
               <>
-                <li>{user.result.firstName}</li>
+                <li className={styles["nav__list-item"]}>
+                  {user.result.firstName}
+                </li>
                 <li onClick={logout} className={styles["nav__list-item"]}>
                   Log out
                 </li>
               </>
             ) : (
-              <li
-                component={Link}
-                to="/auth"
-                className={styles["nav__list-item"]}
-              >
+              <Link to="/auth" className={styles["nav__list-item"]}>
                 Log in
-              </li>
+              </Link>
             )}
             <li className={styles["nav__list-item"]}>
               EN
@@ -87,7 +81,7 @@ function Navbar() {
         </div>
       </nav>
     </header>
-  );
+  )
 }
 
-export default Navbar;
+export default Navbar
