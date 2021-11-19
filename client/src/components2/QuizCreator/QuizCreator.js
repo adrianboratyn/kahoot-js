@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
-import styles from "./quizCreator.module.css";
-import QuestionListItem from "./QuestionListItem/QuestionListItem";
-import img6 from "../../assets/img6.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { createQuiz, getQuizes, updateQuiz } from "../../actions/quiz";
-import { updateQuestion } from "../../api";
+import React, { useState, useEffect } from "react"
+import styles from "./quizCreator.module.css"
+import QuestionListItem from "./QuestionListItem/QuestionListItem"
+import img6 from "../../assets/img6.svg"
+import { useDispatch, useSelector } from "react-redux"
+import { createQuiz, getQuizes, updateQuiz } from "../../actions/quiz"
+import { updateQuestion } from "../../api"
 
 function QuizCreator() {
-  const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(getQuizes());
-  // }, [dispatch]);
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getQuizes())
+  }, [dispatch])
+
+  const quizes = useSelector((state) => state.quiz)
+  // console.log(quizes)
 
   const [quizData, setQuizData] = useState({
     name: "",
@@ -19,10 +22,9 @@ function QuizCreator() {
     description: "",
     pointsPerQuestion: 0,
     questionList: [],
-  });
+  })
   //const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
-  //const [currentQuestion, setCurrentQuestion] = useState(null);
   const [questionData, setQuestionData] = useState({
     questionType: "",
     pointType: "",
@@ -30,45 +32,46 @@ function QuizCreator() {
     backgroundImage: "",
     question: "",
     answerList: [],
+    questionIndex: 0,
     // correctAnswersList: [],
-  });
-  const [firstAnswer, setFirstAnswer] = useState("");
-  const [secondAnswer, setSecondAnswer] = useState("");
-  const [thirdAnswer, setThirdAnswer] = useState("");
-  const [fourthAnswer, setFourthAnswer] = useState("");
+  })
+  const [firstAnswer, setFirstAnswer] = useState("")
+  const [secondAnswer, setSecondAnswer] = useState("")
+  const [thirdAnswer, setThirdAnswer] = useState("")
+  const [fourthAnswer, setFourthAnswer] = useState("")
 
-  const [answers, setAnswers] = useState([]);
-  const [questions, setQuestions] = useState([]);
-  const [number, setNumber] = useState(1);
-  const [isQuizOptionsVisible, setIsQuizOptionsVisible] = useState(false);
+  // const [answers, setAnswers] = useState([])
+  const [questions, setQuestions] = useState([])
+  const [number, setNumber] = useState(1)
+  const [isQuizOptionsVisible, setIsQuizOptionsVisible] = useState(false)
+  const [isQuestionDataSave, setIsQuestionDataSave] = useState(false)
+  const [isQuestionUpdated, setIsQuestionUpdated] = useState(false)
+
+  useEffect(() => {
+    setQuestionData({ ...questionData, questionIndex: number })
+  }, [number])
 
   const showQuizOptions = () => {
     setIsQuizOptionsVisible(
       (prevIsQuizOptionsVisible) => !prevIsQuizOptionsVisible
-    );
-  };
+    )
+  }
 
   const handleQuizSubmit = (e) => {
-    if (questions.length > 0) {
-      setQuizData({ ...quizData, questionList: questions });
-    } else {
-      setQuizData({ ...quizData, questionList: questionData });
-    }
-
-    dispatch(createQuiz(quizData));
-  };
+    dispatch(createQuiz(quizData))
+  }
 
   const handleQuizChange = (e) => {
-    setQuizData({ ...quizData, [e.target.name]: e.target.value });
-    console.log(quizData);
-  };
+    setQuizData({ ...quizData, [e.target.name]: e.target.value })
+    // console.log(quizData);
+  }
 
   const addAnswer = (name, body) => {
     setQuestionData((prevState) => ({
       ...prevState,
       answerList: [...prevState.answerList, { name: name, body: body }],
-    }));
-  };
+    }))
+  }
 
   const updateAnswer = (name, body, index) => {
     setQuestionData((prevState) => ({
@@ -78,76 +81,84 @@ function QuizCreator() {
         { name: name, body: body },
         ...prevState.answerList.slice(index + 1, prevState.answerList.length),
       ],
-    }));
+    }))
     // setArray((a) => [
     //   ...a.slice(0, index),
     //   newElement,
     //   ...a.slice(index + 1, a.length),
     // ]);
     // setArray((a) => [...a, element]);
-  };
-  const handleQuestionSubmit = () => {
-    // addAnswer({ name: "a", body: firstAnswer });
-    // addAnswer({ name: "b", body: secondAnswer });
-    // addAnswer({ name: "c", body: thirdAnswer });
-    // addAnswer({ name: "d", body: fourthAnswer });
-    if (questionData.answerList.length === 0) {
-      addAnswer("a", firstAnswer);
-      addAnswer("b", secondAnswer);
-      addAnswer("c", thirdAnswer);
-      addAnswer("d", fourthAnswer);
-      setQuestions((a) => [...a, questionData]);
-      setNumber((prevNumber) => prevNumber + 1);
-    } else {
-      updateAnswer("a", firstAnswer, 0);
-      updateAnswer("b", secondAnswer, 1);
-      updateAnswer("c", thirdAnswer, 2);
-      updateAnswer("d", fourthAnswer, 3);
-      // nie update pytania bo ona się samo updatuje
-      // tylko update questions
-      // nie number-1 tylko jakoś znaleźć nr pytania
-      // updateQuestion(questionData, number - 1);
-      // setQuestions((a) => [...a, questionData]);
+  }
+  useEffect(() => {
+    if (isQuestionUpdated === true) {
+      setQuestions((prevState) => [
+        ...prevState.slice(0, questionData.questionIndex - 1),
+        questionData,
+        ...prevState.slice(questionData.questionIndex, prevState.length),
+      ])
     }
+  }, [isQuestionUpdated])
 
-    //dodać answers do pytania
-  };
+  const handleQuestionSubmit = () => {
+    console.log(questionData.answerList.length)
+    if (questionData.answerList.length === 0) {
+      addAnswer("a", firstAnswer)
+      addAnswer("b", secondAnswer)
+      addAnswer("c", thirdAnswer)
+      addAnswer("d", fourthAnswer)
+    } else {
+      updateAnswer("a", firstAnswer, 0)
+      updateAnswer("b", secondAnswer, 1)
+      updateAnswer("c", thirdAnswer, 2)
+      updateAnswer("d", fourthAnswer, 3)
+      setIsQuestionUpdated(true)
+    }
+    setIsQuestionDataSave(true)
+  }
 
-  const updateQuestion = (data, index) => {
-    //  setQuestions((prevState) => ({
-    //    ...prevState,
-    //    answerList: [
-    //      ...prevState.answerList.slice(0, index),
-    //      { name: name, body: body },
-    //      ...prevState.answerList.slice(index + 1, prevState.answerList.length),
-    //    ],
-    //  }));
-    // setArray((a) => [
-    //   ...a.slice(0, index),
-    //   newElement,
-    //   ...a.slice(index + 1, a.length),
-    // ]);
-  };
+  const clear = () => {
+    setQuestionData({
+      questionType: "",
+      pointType: "",
+      answerTime: 0,
+      backgroundImage: "",
+      question: "",
+      answerList: [],
+    })
+    setFirstAnswer("")
+    setSecondAnswer("")
+    setThirdAnswer("")
+    setFourthAnswer("")
+  }
 
   const addNewQuestion = () => {
-    // setNumber((prevNumber) => prevNumber + 1);
-    // setQuestions((a) => [...a, questionData]);
-    console.log(questionData);
-  };
+    if (isQuestionUpdated === false) {
+      setQuestions((a) => [...a, questionData])
+      setNumber((prevNumber) => prevNumber + 1)
+    }
+    setIsQuestionUpdated(false)
+    setIsQuestionDataSave(false)
+    console.log(questionData.questionIndex)
+    setQuizData({
+      ...quizData,
+      questionList: [...quizData.questionList, questionData],
+    })
+    clear()
+  }
 
   const handleQuestionChange = (e) => {
-    setQuestionData({ ...questionData, [e.target.name]: e.target.value });
-  };
+    setQuestionData({ ...questionData, [e.target.name]: e.target.value })
+  }
 
-  // const handleAnswerChange = (e) => {
-  //   setAnswers({ ...answers, [e.target.name]: e.target.value });
-  //   console.log(answers);
-  // };
-
-  const showQuestion = (name) => {
-    var question = questions.map((question) => question.name === name);
-    // setQuestionData(question)
-  };
+  const showQuestion = (index) => {
+    var q = questions.filter((question) => question.questionIndex === index)
+    console.log(q[0])
+    setQuestionData(q[0])
+    setFirstAnswer(q[0].answerList[0].body)
+    setSecondAnswer(q[0].answerList[1].body)
+    setThirdAnswer(q[0].answerList[2].body)
+    setFourthAnswer(q[0].answerList[3].body)
+  }
 
   return (
     <section className={styles.section}>
@@ -167,9 +178,10 @@ function QuizCreator() {
           {questions.length > 0 &&
             questions.map((question) => (
               <QuestionListItem
-                onClick={showQuestion(question.name)}
-                key={number}
-                number={number}
+                // onClick={() => showQuestion(question.name)}
+                onClick={() => showQuestion(question.questionIndex)}
+                key={question.questionIndex}
+                number={question.questionIndex}
                 type={question.questionType}
                 name={question.question}
                 time={question.answerTime}
@@ -178,6 +190,9 @@ function QuizCreator() {
             ))}
 
           <button
+            style={{
+              pointerEvents: isQuestionDataSave ? "auto" : "none",
+            }}
             onClick={addNewQuestion}
             className={styles["add-question-button"]}
           >
@@ -191,6 +206,7 @@ function QuizCreator() {
         <input
           type="text"
           name="question"
+          value={questionData.question}
           onChange={handleQuestionChange}
           placeholder="Zacznij wpisywać swoje pytanie"
           className={styles["question-name"]}
@@ -201,6 +217,7 @@ function QuizCreator() {
           {/* <!-- input do dodawania zdjęcia --> */}
           <input
             name="backgroundImage"
+            value={questionData.backgroundImage}
             onChange={handleQuestionChange}
             type="text"
           />
@@ -225,10 +242,8 @@ function QuizCreator() {
             </svg>
             <input
               type="text"
-              onChange={(e) => {
-                setFirstAnswer(e.target.value);
-                console.log(firstAnswer);
-              }}
+              value={firstAnswer}
+              onChange={(e) => setFirstAnswer(e.target.value)}
               name="a"
             />
             {/* <!-- checkbox która odpowiedź poprawna --> */}
@@ -253,6 +268,7 @@ function QuizCreator() {
             </svg>
             <input
               type="text"
+              value={secondAnswer}
               onChange={(e) => setSecondAnswer(e.target.value)}
               name="b"
             />
@@ -278,6 +294,7 @@ function QuizCreator() {
             </svg>
             <input
               type="text"
+              value={thirdAnswer}
               onChange={(e) => setThirdAnswer(e.target.value)}
               name="c"
             />
@@ -303,6 +320,7 @@ function QuizCreator() {
             </svg>
             <input
               type="text"
+              value={fourthAnswer}
               onChange={(e) => setFourthAnswer(e.target.value)}
               name="d"
             />
@@ -320,12 +338,23 @@ function QuizCreator() {
         >
           <h1>Tytuł</h1>
           <label>Title</label>
-          <input type="text" name="name" onChange={handleQuizChange} />
+          <input
+            value={quizData.name}
+            type="text"
+            name="name"
+            onChange={handleQuizChange}
+          />
           <label>Description</label>
-          <input type="text" name="description" onChange={handleQuizChange} />
+          <input
+            value={quizData.description}
+            type="text"
+            name="description"
+            onChange={handleQuizChange}
+          />
           <label>Points per question</label>
           <input
             type="number"
+            value={quizData.pointsPerQuestion}
             name="pointsPerQuestion"
             onChange={handleQuizChange}
           />
@@ -333,6 +362,7 @@ function QuizCreator() {
           <input
             type="text"
             name="backgroundImage"
+            value={quizData.backgroundImage}
             onChange={handleQuizChange}
           />
           <button onClick={handleQuizSubmit}>Zakończ tworzenie quizu</button>
@@ -464,7 +494,7 @@ function QuizCreator() {
         </div>
       </div>
     </section>
-  );
+  )
 }
 
-export default QuizCreator;
+export default QuizCreator
