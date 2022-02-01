@@ -24,8 +24,8 @@ db.once("open", () => console.log("Connected to database"));
 
 app.use(express.json());
 app.use(cors());
-app.use(authenticateToken);
-app.use(regenerateAccessToken);
+//app.use(authenticateToken);
+//app.use(regenerateAccessToken);
 
 
 app.use("/users", userRouter);

@@ -7,7 +7,7 @@ import { Grid, CircularProgress } from "@material-ui/core";
 const Users = ({setCurrentId}) => {
   const classes = useStyles();
   const users = useSelector((state) => state.users);
-  
+  console.log(users);
   return !users.length ? (
     <CircularProgress />
   ) : (

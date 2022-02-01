@@ -5,12 +5,17 @@ import AnswerInput from "./AnswerInput/AnswerInput"
 import img6 from "../../assets/img6.svg"
 import { useDispatch } from "react-redux"
 import { createQuiz, getQuizes } from "../../actions/quiz"
-
+// import { updateQuestion } from "../../api"
+// useSelector
+// updateQuiz
 function QuizCreator() {
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getQuizes())
   }, [dispatch])
+
+  // const quizes = useSelector((state) => state.quiz)
+  // console.log(quizes)
 
   const [quizData, setQuizData] = useState({
     name: "",
@@ -21,6 +26,7 @@ function QuizCreator() {
     numberOfQuestions: 0,
     questionList: [],
   })
+  //const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
   const [questionData, setQuestionData] = useState({
     questionType: "",
@@ -29,19 +35,31 @@ function QuizCreator() {
     backgroundImage: "",
     question: "",
     answerList: [
-      { name: "a", body: "", isCorrect: false },
-      { name: "b", body: "", isCorrect: false },
-      { name: "c", body: "", isCorrect: false },
-      { name: "d", body: "", isCorrect: false },
+      { name: "a", body: "" },
+      { name: "b", body: "" },
+      { name: "c", body: "" },
+      { name: "d", body: "" },
     ],
     questionIndex: 1,
+    // correctAnswersList: [],
   })
-  const [questions, setQuestions] = useState([])
+  // const [firstAnswer, setFirstAnswer] = useState("")
+  // const [secondAnswer, setSecondAnswer] = useState("")
+  // const [thirdAnswer, setThirdAnswer] = useState("")
+  // const [fourthAnswer, setFourthAnswer] = useState("")
+
+  // const [answers, setAnswers] = useState([])
+  // const [questions, setQuestions] = useState([])
+  const [questions, setQuestions] = useState([questionData])
   const [number, setNumber] = useState(1)
   const [isQuizOptionsVisible, setIsQuizOptionsVisible] = useState(false)
   const [isAnswerCorrect, setIsAnswerCorrect] = useState(false)
   const [isQuestionDataSave, setIsQuestionDataSave] = useState(false)
   const [isQuestionUpdated, setIsQuestionUpdated] = useState(false)
+
+  useEffect(() => {
+    setQuestionData({ ...questionData, questionIndex: number })
+  }, [number])
 
   const showQuizOptions = () => {
     setIsQuizOptionsVisible(
@@ -49,16 +67,8 @@ function QuizCreator() {
     )
   }
 
-   const setCorrectAnswer = (index) => {
+   const setCorrectAnswer = () => {
      setIsAnswerCorrect((prevIsAnswerCorrect) => !prevIsAnswerCorrect)
-     setQuestionData((prevState) => ({
-       ...prevState,
-       answerList: [
-         ...prevState.answerList.slice(0, index),
-         { isCorrect: isAnswerCorrect },
-         ...prevState.answerList.slice(index + 1, prevState.answerList.length),
-       ],
-     }))
    }
 
   const handleQuizSubmit = (e) => {
@@ -67,31 +77,65 @@ function QuizCreator() {
 
   const handleQuizChange = (e) => {
     setQuizData({ ...quizData, [e.target.name]: e.target.value })
+    // console.log(quizData);
   }
 
-  const updateAnswer = (name, body, index, isCorrect) => {
+  // const addAnswer = (name, body) => {
+  //   setQuestionData((prevState) => ({
+  //     ...prevState,
+  //     answerList: [...prevState.answerList, { name: name, body: body }],
+  //   }))
+  // }
+
+  const updateAnswer = (name, body, index) => {
     setQuestionData((prevState) => ({
       ...prevState,
       answerList: [
         ...prevState.answerList.slice(0, index),
-        { name: name, body: body, isCorrect: isCorrect },
+        { name: name, body: body },
         ...prevState.answerList.slice(index + 1, prevState.answerList.length),
       ],
     }))
+    // setArray((a) => [
+    //   ...a.slice(0, index),
+    //   newElement,
+    //   ...a.slice(index + 1, a.length),
+    // ]);
+    // setArray((a) => [...a, element]);
   }
+  // useEffect(() => {
+  //   if (isQuestionUpdated === true) {
+  //     setQuestions((prevState) => [
+  //       ...prevState.slice(0, questionData.questionIndex - 1),
+  //       questionData,
+  //       ...prevState.slice(questionData.questionIndex, prevState.length),
+  //     ])
+  //   }
+  // }, [isQuestionUpdated])
 
   const handleQuestionSubmit = () => {
     console.log("ww")
     setIsQuestionDataSave(true)
-   // if (isQuestionUpdated === true) {
+    if (isQuestionUpdated === true) {
       setQuestions((prevState) => [
         ...prevState.slice(0, questionData.questionIndex - 1),
         questionData,
         ...prevState.slice(questionData.questionIndex, prevState.length),
       ])
-    //} 
+    }
+    // if (isQuestionUpdated === true) {
+    //   setQuestions((prevState) => [
+    //     ...prevState.slice(0, questionData.questionIndex - 1),
+    //     questionData,
+    //     ...prevState.slice(questionData.questionIndex, prevState.length),
+    //   ])
+    // } else {
+    //   setQuestionData({ ...questionData, questionIndex: questions.length+1 })
+    //   setQuestions((a) => [...a, questionData])
+    //   // setNumber((prevNumber) => prevNumber + 1)
+    // }
   }
-
+  // console.log(number)
   const clear = () => {
     setQuestionData({
       questionType: "",
@@ -100,30 +144,28 @@ function QuizCreator() {
       backgroundImage: "",
       question: "",
       answerList: [
-        { name: "a", body: "", isCorrect: false },
-        { name: "b", body: "", isCorrect: false },
-        { name: "c", body: "", isCorrect: false },
-        { name: "d", body: "", isCorrect: false },
+        { name: "a", body: "" },
+        { name: "b", body: "" },
+        { name: "c", body: "" },
+        { name: "d", body: "" },
       ],
-      questionIndex: questions.length + 1,
     })
   }
 
   const addNewQuestion = () => {
-    // if (isQuestionUpdated === false) {
-    //   setQuestions((a) => [...a, questionData])
-    //   setNumber((prevNumber) => prevNumber + 1)
-    // }
-    // setIsQuestionUpdated(false)
-    console.log(questions);
+    if (isQuestionUpdated === false) {
+      setQuestions((a) => [...a, questionData])
+      setNumber((prevNumber) => prevNumber + 1)
+    }
+    setIsQuestionUpdated(false)
     setIsQuestionDataSave(false)
+    // console.log(questionData.questionIndex)
     setQuizData({
       ...quizData,
       questionList: [...quizData.questionList, questionData],
     })
     setQuizData({ ...quizData, numberOfQuestions: questions.length })
     clear()
-    setNumber((prevNumber) => prevNumber + 1)
   }
 
   const handleQuestionChange = (e) => {
@@ -199,7 +241,7 @@ function QuizCreator() {
         </div>
         <div className={styles["answers-container"]}>
           {/* <!-- inputy z odpwiedziami --> */}
-
+          {/* <AnswerInput></AnswerInput> */}
           <div className={styles["answer-field"]}>
             <svg
               id="TRIANGLE"
@@ -215,30 +257,20 @@ function QuizCreator() {
                 style={{ fill: "inherit" }}
               ></path>
             </svg>
-            {/* <AnswerInput
-              value={questionData.answerList[0].body}
-              onChange={(e) => updateAnswer(e.target.name, e.target.value, 0)}
-              onClick={() => setCorrectAnswer(0)}
-              img={img6}
-              isAnswerCorrect={isAnswerCorrect}
-            /> */}
             <input
               type="text"
               value={questionData.answerList[0].body}
               onChange={(e) => updateAnswer(e.target.name, e.target.value, 0)}
               name="a"
             />
-            <div
-            // dodać funkcję handleCorrectAnswerChange
-              onClick={() => setCorrectAnswer(0)}
-              className={styles["answer-check"]}
-            >
+            {/* <!-- checkbox która odpowiedź poprawna --> */}
+            <div onClick={setCorrectAnswer} className={styles["answer-check"]}>
               <img
                 style={{ visibility: isAnswerCorrect ? "visible" : "hidden" }}
                 src={img6}
                 alt=""
               />
-              
+              {/* <input name="a" type="checkbox" /> */}
             </div>
           </div>
           <div className={styles["answer-field"]}>
@@ -263,15 +295,8 @@ function QuizCreator() {
               name="b"
             />
             {/* <!-- checkbox która odpowiedź poprawna --> */}
-            <div
-              // onClick={() => setCorrectAnswer(0)}
-              className={styles["answer-check"]}
-            >
-              <img
-                // style={{ visibility: isAnswerCorrect ? "visible" : "hidden" }}
-                src={img6}
-                alt=""
-              />
+            <div className={styles["answer-check"]}>
+              <img src={img6} alt="" />
             </div>
           </div>
           <div className={styles["answer-field"]}>
@@ -296,15 +321,8 @@ function QuizCreator() {
               name="c"
             />
             {/* <!-- checkbox która odpowiedź poprawna --> */}
-            <div
-              // onClick={() => setCorrectAnswer(0)}
-              className={styles["answer-check"]}
-            >
-              <img
-                // style={{ visibility: isAnswerCorrect ? "visible" : "hidden" }}
-                src={img6}
-                alt=""
-              />
+            <div className={styles["answer-check"]}>
+              <img src={img6} alt="" />
             </div>
           </div>
           <div className={styles["answer-field"]}>
@@ -329,15 +347,8 @@ function QuizCreator() {
               name="d"
             />
             {/* <!-- checkbox która odpowiedź poprawna --> */}
-            <div
-              // onClick={() => setCorrectAnswer(0)}
-              className={styles["answer-check"]}
-            >
-              <img
-                // style={{ visibility: isAnswerCorrect ? "visible" : "hidden" }}
-                src={img6}
-                alt=""
-              />
+            <div className={styles["answer-check"]}>
+              <img src={img6} alt="" />
             </div>
           </div>
         </div>

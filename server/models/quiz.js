@@ -32,7 +32,7 @@ const quizSchema = new mongoose.Schema({
       answerTime: {
         type: Number,
         min: 5,
-        max: 15,
+        max: 90,
       },
       backgroundImage: { type: String },
       question: {

@@ -76,7 +76,11 @@ const register = async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "2h" }
     );
-    res.status(201).json({ result: newUser, accessToken: accessToken });
+    res.status(201).json({
+      result: newUser,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

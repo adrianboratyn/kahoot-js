@@ -1,0 +1,3 @@
+Tutaj wstawić skrypt do wypełnienia bazy danymi
+
+Dodać tez readme z wyjaśnieniem

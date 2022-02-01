@@ -109,7 +109,7 @@ function Home() {
             </div>
           </div>
           <div className={styles["card-button"]}>
-            Play Quizzly to see how it works.
+            Play Quizzly to see how it works. &nbsp;
             <a href="/">Explore our public quizes</a>
           </div>
         </section>
