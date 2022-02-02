@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react"
 import styles from "./quizCreator.module.css"
 import QuestionListItem from "./QuestionListItem/QuestionListItem"
 import AnswerInput from "./AnswerInput/AnswerInput"
-import img6 from "../../assets/img6.svg"
+import triangle from "../../assets/triangle.svg"
+import diamond from "../../assets/diamond.svg"
+import circle from "../../assets/circle.svg"
+import square from "../../assets/square.svg"
 import { useDispatch } from "react-redux"
 import { createQuiz, getQuizes } from "../../actions/quiz"
 
@@ -37,11 +40,8 @@ function QuizCreator() {
     questionIndex: 1,
   })
   const [questions, setQuestions] = useState([])
-  const [number, setNumber] = useState(1)
   const [isQuizOptionsVisible, setIsQuizOptionsVisible] = useState(false)
-  const [isAnswerCorrect, setIsAnswerCorrect] = useState(false)
   const [isQuestionDataSave, setIsQuestionDataSave] = useState(false)
-  const [isQuestionUpdated, setIsQuestionUpdated] = useState(false)
 
   const showQuizOptions = () => {
     setIsQuizOptionsVisible(
@@ -49,17 +49,22 @@ function QuizCreator() {
     )
   }
 
-   const setCorrectAnswer = (index) => {
-     setIsAnswerCorrect((prevIsAnswerCorrect) => !prevIsAnswerCorrect)
-     setQuestionData((prevState) => ({
-       ...prevState,
-       answerList: [
-         ...prevState.answerList.slice(0, index),
-         { isCorrect: isAnswerCorrect },
-         ...prevState.answerList.slice(index + 1, prevState.answerList.length),
-       ],
-     }))
-   }
+  const setCorrectAnswer = (index) => {
+    // questionData.answerList[index].isCorrect =
+    //   !questionData.answerList[index].isCorrect
+    setQuestionData((prevState) => ({
+      ...prevState,
+      answerList: [
+        ...prevState.answerList.slice(0, index),
+        {
+          name: prevState.answerList[index].name,
+          body: prevState.answerList[index].body,
+          isCorrect: !prevState.answerList[index].isCorrect,
+        },
+        ...prevState.answerList.slice(index + 1, prevState.answerList.length),
+      ],
+    }))
+  }
 
   const handleQuizSubmit = (e) => {
     dispatch(createQuiz(quizData))
@@ -69,12 +74,16 @@ function QuizCreator() {
     setQuizData({ ...quizData, [e.target.name]: e.target.value })
   }
 
-  const updateAnswer = (name, body, index, isCorrect) => {
+  const updateAnswer = (name, body, index) => {
     setQuestionData((prevState) => ({
       ...prevState,
       answerList: [
         ...prevState.answerList.slice(0, index),
-        { name: name, body: body, isCorrect: isCorrect },
+        {
+          name: name,
+          body: body,
+          isCorrect: prevState.answerList[index].isCorrect,
+        },
         ...prevState.answerList.slice(index + 1, prevState.answerList.length),
       ],
     }))
@@ -83,13 +92,13 @@ function QuizCreator() {
   const handleQuestionSubmit = () => {
     console.log("ww")
     setIsQuestionDataSave(true)
-   // if (isQuestionUpdated === true) {
-      setQuestions((prevState) => [
-        ...prevState.slice(0, questionData.questionIndex - 1),
-        questionData,
-        ...prevState.slice(questionData.questionIndex, prevState.length),
-      ])
-    //} 
+    // if (isQuestionUpdated === true) {
+    setQuestions((prevState) => [
+      ...prevState.slice(0, questionData.questionIndex - 1),
+      questionData,
+      ...prevState.slice(questionData.questionIndex, prevState.length),
+    ])
+    //}
   }
 
   const clear = () => {
@@ -115,7 +124,7 @@ function QuizCreator() {
     //   setNumber((prevNumber) => prevNumber + 1)
     // }
     // setIsQuestionUpdated(false)
-    console.log(questions);
+    console.log(questions)
     setIsQuestionDataSave(false)
     setQuizData({
       ...quizData,
@@ -123,7 +132,6 @@ function QuizCreator() {
     })
     setQuizData({ ...quizData, numberOfQuestions: questions.length })
     clear()
-    setNumber((prevNumber) => prevNumber + 1)
   }
 
   const handleQuestionChange = (e) => {
@@ -131,7 +139,6 @@ function QuizCreator() {
   }
 
   const showQuestion = (index) => {
-    setIsQuestionUpdated(true)
     var q = questions.filter((question) => question.questionIndex === index)
     setQuestionData(q[0])
   }
@@ -198,147 +205,42 @@ function QuizCreator() {
           <button className={styles["add-image-button"]}>+</button>
         </div>
         <div className={styles["answers-container"]}>
-          {/* <!-- inputy z odpwiedziami --> */}
 
           <div className={styles["answer-field"]}>
-            <svg
-              id="TRIANGLE"
-              data-functional-selector="icon"
-              viewBox="0 0 32 32"
-              focusable="false"
-              stroke="rgba(0, 0, 0, 0.15)"
-              strokeWidth="1.3px"
-              style={{ paintOrder: "stroke" }}
-            >
-              <path
-                d="M27,24.559972 L5,24.559972 L16,7 L27,24.559972 Z"
-                style={{ fill: "inherit" }}
-              ></path>
-            </svg>
-            {/* <AnswerInput
+            <AnswerInput
               value={questionData.answerList[0].body}
               onChange={(e) => updateAnswer(e.target.name, e.target.value, 0)}
               onClick={() => setCorrectAnswer(0)}
-              img={img6}
-              isAnswerCorrect={isAnswerCorrect}
-            /> */}
-            <input
-              type="text"
-              value={questionData.answerList[0].body}
-              onChange={(e) => updateAnswer(e.target.name, e.target.value, 0)}
-              name="a"
+              isAnswerCorrect={questionData.answerList[0].isCorrect}
+              svg={triangle}
             />
-            <div
-            // dodać funkcję handleCorrectAnswerChange
-              onClick={() => setCorrectAnswer(0)}
-              className={styles["answer-check"]}
-            >
-              <img
-                style={{ visibility: isAnswerCorrect ? "visible" : "hidden" }}
-                src={img6}
-                alt=""
-              />
-              
-            </div>
           </div>
           <div className={styles["answer-field"]}>
-            <svg
-              id="DIAMOND"
-              data-functional-selector="icon"
-              viewBox="0 0 32 32"
-              focusable="false"
-              stroke="rgba(0, 0, 0, 0.15)"
-              strokeWidth="1.3px"
-              style={{ paintOrder: "stroke" }}
-            >
-              <path
-                d="M4,16.0038341 L16,4 L28,16.0007668 L16,28 L4,16.0038341 Z"
-                style={{ fill: "inherit" }}
-              ></path>
-            </svg>
-            <input
-              type="text"
+            <AnswerInput
               value={questionData.answerList[1].body}
               onChange={(e) => updateAnswer(e.target.name, e.target.value, 1)}
-              name="b"
+              onClick={() => setCorrectAnswer(1)}
+              isAnswerCorrect={questionData.answerList[1].isCorrect}
+              svg={diamond}
             />
-            {/* <!-- checkbox która odpowiedź poprawna --> */}
-            <div
-              // onClick={() => setCorrectAnswer(0)}
-              className={styles["answer-check"]}
-            >
-              <img
-                // style={{ visibility: isAnswerCorrect ? "visible" : "hidden" }}
-                src={img6}
-                alt=""
-              />
-            </div>
           </div>
           <div className={styles["answer-field"]}>
-            <svg
-              id="CIRCLE"
-              data-functional-selector="icon"
-              viewBox="0 0 32 32"
-              focusable="false"
-              stroke="rgba(0, 0, 0, 0.15)"
-              strokeWidth="1.3px"
-              style={{ paintOrder: "stroke" }}
-            >
-              <path
-                d="M16,27 C9.92486775,27 5,22.0751322 5,16 C5,9.92486775 9.92486775,5 16,5 C22.0751322,5 27,9.92486775 27,16 C27,22.0751322 22.0751322,27 16,27 Z"
-                style={{ fill: "inherit" }}
-              ></path>
-            </svg>
-            <input
-              type="text"
+            <AnswerInput
               value={questionData.answerList[2].body}
               onChange={(e) => updateAnswer(e.target.name, e.target.value, 2)}
-              name="c"
+              onClick={() => setCorrectAnswer(2)}
+              isAnswerCorrect={questionData.answerList[2].isCorrect}
+              svg={circle}
             />
-            {/* <!-- checkbox która odpowiedź poprawna --> */}
-            <div
-              // onClick={() => setCorrectAnswer(0)}
-              className={styles["answer-check"]}
-            >
-              <img
-                // style={{ visibility: isAnswerCorrect ? "visible" : "hidden" }}
-                src={img6}
-                alt=""
-              />
-            </div>
           </div>
           <div className={styles["answer-field"]}>
-            <svg
-              id="SQUARE"
-              data-functional-selector="icon"
-              viewBox="0 0 32 32"
-              focusable="false"
-              stroke="rgba(0, 0, 0, 0.15)"
-              strokeWidth="1.3px"
-              style={{ paintOrder: "stroke" }}
-            >
-              <path
-                d="M7,7 L25,7 L25,25 L7,25 L7,7 Z"
-                style={{ fill: "inherit" }}
-              ></path>
-            </svg>
-            <input
-              type="text"
+            <AnswerInput
               value={questionData.answerList[3].body}
               onChange={(e) => updateAnswer(e.target.name, e.target.value, 3)}
-              name="d"
+              onClick={() => setCorrectAnswer(3)}
+              isAnswerCorrect={questionData.answerList[3].isCorrect}
+              svg={square}
             />
-            {/* <!-- checkbox która odpowiedź poprawna --> */}
-            <div
-              // onClick={() => setCorrectAnswer(0)}
-              className={styles["answer-check"]}
-            >
-              <img
-                // style={{ visibility: isAnswerCorrect ? "visible" : "hidden" }}
-                src={img6}
-                alt=""
-              />
-            </div>
           </div>
         </div>
       </div>
