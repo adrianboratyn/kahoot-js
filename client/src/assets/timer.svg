@@ -1,0 +1,14 @@
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    id="timer"
+    data-functional-selector="icon"
+    viewBox="0 0 32 32"
+    focusable="false"
+    stroke="none"
+    strokeWidth="0"
+>
+    <path
+        d="M16,26 C10.486,26 6,21.515 6,16 C6,10.487 10.486,6 16,6 C21.514,6 26,10.486 26,16 C26,21.515 21.514,26 16,26 Z M16,8 C11.589,8 8,11.589 8,16 C8,20.411 11.589,24 16,24 C20.411,24 24,20.411 24,16 C24,11.589 20.411,8 16,8 Z M15,11 L17,11 L17,18 L15,18 L15,11 Z"
+        style="fill: rgb(51, 51, 51);"
+    ></path>
+</svg>
