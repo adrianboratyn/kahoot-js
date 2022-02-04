@@ -16,17 +16,22 @@ import FileBase from "react-file-base64"
 
 function QuizCreator() {
   const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(getQuizes())
-  }, [dispatch])
+  // useEffect(() => {
+  //   dispatch(getQuizes())
+  // }, [dispatch])
+
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")))
 
   const [quizData, setQuizData] = useState({
     name: "",
-    creatorId: "6167e40536af49570b38433f",
+    creatorId: user.result._id,
     backgroundImage: "",
     description: "",
     pointsPerQuestion: 0,
-    numberOfQuestions: 0,
+    numberOfQuestions: 1,
+    isPublic: true,
+    tags: [],
+    likesCount: 0,
     questionList: [],
   })
 
@@ -46,6 +51,7 @@ function QuizCreator() {
   })
   const [questions, setQuestions] = useState([])
   const [isQuizOptionsVisible, setIsQuizOptionsVisible] = useState(false)
+  const [isQuizPublic, setIsQuizPublic] = useState(true)
   const [isQuestionDataSave, setIsQuestionDataSave] = useState(false)
   const [questionImage, setQuestionImage] = useState("")
   const [quizImage, setQuizImage] = useState("")
@@ -73,9 +79,6 @@ function QuizCreator() {
     questionData.answerList[index].isCorrect
       ? setCorrectAnswerCount((prevState) => prevState - 1)
       : setCorrectAnswerCount((prevState) => prevState + 1)
-
-    // console.log(questionData.answerList[index].isCorrect)
-    // console.log(correctAnswerCount)
   }
 
   const handleQuizSubmit = (e) => {
@@ -124,6 +127,31 @@ function QuizCreator() {
         questionData,
         ...prevState.slice(questionData.questionIndex, prevState.length),
       ])
+      // it means question already exist and is only updated
+      if (
+        questions.filter(
+          (question) => (question.questionIndex = questionData.questionIndex)
+        )
+      ) {
+        //update list of questions in quizData
+        setQuizData((prevState) => ({
+          ...prevState,
+          questionList: [
+            ...prevState.questionList.slice(0, questionData.questionIndex - 1),
+            questionData,
+            ...prevState.questionList.slice(
+              questionData.questionIndex,
+              prevState.questionList.length
+            ),
+          ],
+        }))
+      } else {
+        //add new question
+        setQuizData({
+          ...quizData,
+          questionList: [...quizData.questionList, questionData],
+        })
+      }
     }
   }
 
@@ -171,10 +199,6 @@ function QuizCreator() {
   const addNewQuestion = () => {
     console.log(questions)
     setIsQuestionDataSave(false)
-    setQuizData({
-      ...quizData,
-      questionList: [...quizData.questionList, questionData],
-    })
     setQuizData({ ...quizData, numberOfQuestions: questions.length })
     clear()
     setIsQuestionTrueFalse(false)
@@ -220,7 +244,7 @@ function QuizCreator() {
     questionData.answerList.forEach((answer) => (answer.isCorrect = false))
     setCorrectAnswerCount(0)
   }
-  \
+
   return (
     <section className={styles.section}>
       <div className={styles["question-list"]}>
@@ -392,10 +416,42 @@ function QuizCreator() {
           </div>
           <input
             type="number"
+            min={1}
             value={quizData.pointsPerQuestion}
             name="pointsPerQuestion"
             onChange={handleQuizChange}
           />
+          <div className={styles["option-label"]}>
+            <label>Dostępność quizu</label>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                setIsQuizPublic(true)
+                setQuizData({ ...quizData, isPublic: true })
+              }}
+              className={styles["option-button"]}
+              style={{
+                backgroundColor: isQuizPublic ? "rgb(19, 104, 206)" : "inherit",
+                color: isQuizPublic ? "white" : "rgb(110, 110, 110)",
+              }}
+            >
+              Publiczny
+            </button>
+            <button
+              onClick={() => {
+                setIsQuizPublic(false)
+                setQuizData({ ...quizData, isPublic: false })
+              }}
+              className={styles["option-button"]}
+              style={{
+                backgroundColor: isQuizPublic ? "inherit" : "rgb(19, 104, 206)",
+                color: isQuizPublic ? "rgb(110, 110, 110)" : "white",
+              }}
+            >
+              Prywatny
+            </button>
+          </div>
           <div className={styles["option-label"]}>
             <label>Background Image</label>
           </div>
@@ -409,7 +465,20 @@ function QuizCreator() {
               }}
             />
           </div>
-          {quizImage && <img src={quizImage} alt="" />}
+          {quizImage && (
+            <img className={styles["quiz-image"]} src={quizImage} alt="" />
+          )}
+          <div className={styles["option-label"]}>
+            <label>Tagi (oddzielaj przecinkiem)</label>
+          </div>
+          <input
+            type="text"
+            value={quizData.tags}
+            name="tags"
+            onChange={(e) =>
+              setQuizData({ ...quizData, tags: e.target.value.split(",") })
+            }
+          />
           <div>
             <button
               className={styles["option-button"]}
@@ -418,10 +487,6 @@ function QuizCreator() {
               Zakończ tworzenie quizu
             </button>
           </div>
-
-          {/* <!-- opis -->
-          <!-- obraz tytułowy -->
-          <!-- checkbox - prywatny, publiczny --> */}
         </div>
         <div
           style={{ display: isQuizOptionsVisible ? "none" : "block" }}
@@ -460,12 +525,12 @@ function QuizCreator() {
               <option defaultValue disabled>
                 Wybierz limit czasu
               </option>
-              <option value="5">5 sekund</option>
-              <option value="10">10 sekund</option>
-              <option value="20">20 sekund</option>
-              <option value="30">30 sekund</option>
-              <option value="60">1 minuta</option>
-              <option value="90">1 minuta 30 sekund</option>
+              <option value={5}>5 sekund</option>
+              <option value={10}>10 sekund</option>
+              <option value={20}>20 sekund</option>
+              <option value={30}>30 sekund</option>
+              <option value={60}>1 minuta</option>
+              <option value={90}>1 minuta 30 sekund</option>
             </select>
           </div>
           <div className={styles.option}>
