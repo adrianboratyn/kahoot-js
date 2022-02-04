@@ -1,6 +1,6 @@
 import axios from "axios";
-// 5001?
-const API = axios.create({ baseURL: "http://localhost:5000" });
+
+const API = axios.create({ baseURL: "http://localhost:1000/api" });
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem("profile")) {
@@ -27,7 +27,7 @@ export const updateQuestion = (quizId, questionId, updatedQuestion) =>
 export const updateQuiz = (id, updatedQuiz) =>
   API.patch(`/quizes/${id}`, updatedQuiz);
 
-const AUTH_API = axios.create({ baseURL: "http://localhost:4000/auth" });
+const AUTH_API = axios.create({ baseURL: "http://localhost:4000/api/auth" });
 
 export const login = (formData) => AUTH_API.post("/login", formData);
 export const register = (formData) => AUTH_API.post("/register", formData);

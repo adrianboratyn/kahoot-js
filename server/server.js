@@ -24,14 +24,14 @@ db.once("open", () => console.log("Connected to database"));
 
 app.use(express.json());
 app.use(cors());
-//app.use(authenticateToken);
+app.use(authenticateToken);
 //app.use(regenerateAccessToken);
 
 
-app.use("/users", userRouter);
-app.use("/quizes", quizRouter);
-app.use("/games", gameRouter);
-app.use("/playerResults", playerResultRouter);
+app.use("/api/users", userRouter);
+app.use("/api/quizes", quizRouter);
+app.use("/api/games", gameRouter);
+app.use("/api/playerResults", playerResultRouter);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server started on port ${process.env.PORT}`)

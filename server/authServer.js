@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors())
 
 const authRouter = require("./routes/auth");
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
 
 app.listen(process.env.AUTH_PORT, () =>
   console.log(`Auth Server started on port ${process.env.AUTH_PORT}`)
