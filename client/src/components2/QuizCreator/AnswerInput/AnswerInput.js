@@ -7,7 +7,7 @@ function AnswerInput({ value, onChange, onClick, isAnswerCorrect, svg }) {
 
   return (
     <>
-      <img src={svg} alt="" />
+      <img className={styles["answer-icon"]} src={svg} alt="" />
       <input type="text" value={value} onChange={onChange} name="a" />
       <div onClick={onClick} className={styles["answer-check"]}>
         <img
