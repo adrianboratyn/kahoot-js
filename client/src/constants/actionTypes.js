@@ -1,6 +1,10 @@
-export const CREATE = 'CREATE'
-export const UPDATE = "UPDATE";
-export const DELETE = "DELETE";
-export const FETCH_ALL = "FETCH_ALL";
+export const CREATE_QUIZ = "CREATE_QUIZ"
+export const UPDATE_QUIZ = "UPDATE_QUIZ"
+export const DELETE_QUIZ = "DELETE_QUIZ"
+export const FETCH_ALL_QUIZES = "FETCH_ALL_QUIZES"
+export const CREATE_USER = "CREATE_USER"
+export const UPDATE_USER = "UPDATE_USER"
+export const DELETE_USER = "DELETE_USER"
+export const FETCH_ALL_USERS = "FETCH_ALL_USERS"
 export const AUTH = "AUTH";
 export const LOGOUT = "LOGOUT";

@@ -1,15 +1,12 @@
-import { FETCH_ALL, CREATE, UPDATE } from "../constants/actionTypes";
+import { FETCH_ALL_QUIZES, CREATE_QUIZ, UPDATE_QUIZ } from "../constants/actionTypes";
 
 const reducer = (quizes = [], action) => {
   switch (action.type) {
-    case FETCH_ALL:
+    case FETCH_ALL_QUIZES:
       return action.payload;
-    case CREATE:
+    case CREATE_QUIZ:
       return [...quizes, action.payload];
-    // return users.map((user) =>
-    //   user._id === action.payload._id ? action.payload : user
-    // );
-    case UPDATE:
+    case UPDATE_QUIZ:
       return quizes.map((quiz) =>
         quiz._id === action.payload._id ? action.payload : quiz
       );
