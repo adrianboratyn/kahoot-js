@@ -8,6 +8,7 @@ const quizSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  creatorName: { type: String },
   pointsPerQuestion: {
     type: Number,
     min: 1,
@@ -18,8 +19,8 @@ const quizSchema = new mongoose.Schema({
   },
   isPublic: { type: Boolean, required: true, default: true },
   tags: [String],
-  likesCount: { type: Number, default: 0 },
-  dateCreated: {type: Date, default: new Date()},
+  likesCount: { type: [String], default: [] },
+  dateCreated: { type: Date, default: new Date() },
   questionList: [
     {
       questionType: {
@@ -47,7 +48,7 @@ const quizSchema = new mongoose.Schema({
         {
           name: { type: String },
           body: { type: String },
-          isCorrect: {type: Boolean}
+          isCorrect: { type: Boolean },
         },
       ],
       questionIndex: { type: Number, required: true },

@@ -6,9 +6,8 @@ const createQuiz = async (req, res) => {
     name,
     backgroundImage,
     description,
-    creatorId,
+    creatorName,
     pointsPerQuestion,
-    numberOfQuestions,
     isPublic,
     tags,
     likesCount,
@@ -18,13 +17,15 @@ const createQuiz = async (req, res) => {
     name,
     backgroundImage,
     description,
-    creatorId,
+    creatorId: req.user.id,
+    creatorName,
     pointsPerQuestion,
-    numberOfQuestions,
+    numberOfQuestions: questionList.length,
     isPublic,
     tags,
     likesCount,
     questionList,
+    dateCreated: new Date().toISOString(),
   })
 
   try {
@@ -232,13 +233,15 @@ const likeQuiz = async (req, res) => {
 
   try {
     const quiz = await Quiz.findById(id)
-    const updatedQuiz = await Quiz.findByIdAndUpdate(
-      id,
-      {
-        likesCount: quiz.likesCount + 1,
-      },
-      { new: true }
-    )
+    const index = quiz.likesCount.findIndex((id) => id === String(req.user.id))
+    if (index === -1) {
+      quiz.likesCount.push(req.user.id)
+    } else {
+      quiz.likesCount = quiz.likesCount.filter(
+        (id) => id !== String(req.user.id)
+      )
+    }
+    const updatedQuiz = await Quiz.findByIdAndUpdate(id, quiz, { new: true })
     res.json(updatedQuiz)
   } catch (error) {
     res.status(400).json({ message: error.message })
