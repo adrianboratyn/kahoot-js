@@ -5,6 +5,7 @@ import Home from "./components2/Home/Home";
 import Auth from "./components/Auth/Auth";
 import Footer from "./components2/Footer/Footer";
 import QuizCreator from "./components2/QuizCreator/QuizCreator";
+import Quizes from "./components2/Quizes/Quizes";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" exact component={Home} />
         <Route path="/auth" exact component={Auth} />
         <Route path="/quizCreator" exact component={QuizCreator} />
+        <Route path="/quizes" exact component={Quizes} />
       </Switch>
       <Footer />
     </BrowserRouter>
