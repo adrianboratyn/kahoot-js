@@ -224,6 +224,27 @@ const updateQuestion = async (req, res) => {
   }
 }
 
+const likeQuiz = async (req, res) => {
+  const { id } = req.params
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).send(`No quiz with id: ${id}`)
+  }
+
+  try {
+    const quiz = await Quiz.findById(id)
+    const updatedQuiz = await Quiz.findByIdAndUpdate(
+      id,
+      {
+        likesCount: quiz.likesCount + 1,
+      },
+      { new: true }
+    )
+    res.json(updatedQuiz)
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
+}
+
 module.exports = {
   createQuiz,
   getQuizes,
@@ -235,4 +256,5 @@ module.exports = {
   getQuestion,
   updateQuestion,
   deleteQuestion,
+  likeQuiz,
 }

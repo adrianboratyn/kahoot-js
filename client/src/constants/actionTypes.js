@@ -1,5 +1,6 @@
 export const CREATE_QUIZ = "CREATE_QUIZ"
 export const UPDATE_QUIZ = "UPDATE_QUIZ"
+export const LIKE_QUIZ = "LIKE_QUIZ"
 export const DELETE_QUIZ = "DELETE_QUIZ"
 export const FETCH_ALL_QUIZES = "FETCH_ALL_QUIZES"
 export const CREATE_USER = "CREATE_USER"
