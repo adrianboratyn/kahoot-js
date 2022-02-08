@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import styles from "./quizCreator.module.css"
 import QuestionListItem from "./QuestionListItem/QuestionListItem"
 import AnswerInput from "./AnswerInput/AnswerInput"
@@ -11,27 +11,23 @@ import timer from "../../assets/timer.svg"
 import gamePoints from "../../assets/gamePoints.svg"
 import answerOptions from "../../assets/answerOptions.svg"
 import { useDispatch } from "react-redux"
-import { createQuiz, getQuizes } from "../../actions/quiz"
+import { createQuiz } from "../../actions/quiz"
 import FileBase from "react-file-base64"
 
 function QuizCreator() {
   const dispatch = useDispatch()
-  // useEffect(() => {
-  //   dispatch(getQuizes())
-  // }, [dispatch])
 
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")))
+  const user = JSON.parse(localStorage.getItem("profile"))
 
   const [quizData, setQuizData] = useState({
     name: "",
-    creatorId: user.result._id,
+    creatorName: `${user?.result.firstName} ${user?.result.lastName}`,
     backgroundImage: "",
     description: "",
     pointsPerQuestion: 0,
-    numberOfQuestions: 1,
+    numberOfQuestions: 0,
     isPublic: true,
     tags: [],
-    likesCount: 0,
     questionList: [],
   })
 
@@ -49,7 +45,7 @@ function QuizCreator() {
     ],
     questionIndex: 1,
   })
-  const [questions, setQuestions] = useState([])
+
   const [isQuizOptionsVisible, setIsQuizOptionsVisible] = useState(false)
   const [isQuizPublic, setIsQuizPublic] = useState(true)
   const [isQuestionDataSave, setIsQuestionDataSave] = useState(false)
@@ -122,15 +118,10 @@ function QuizCreator() {
       alert("Wybierz poprawną odpowiedź")
     } else {
       setIsQuestionDataSave(true)
-      setQuestions((prevState) => [
-        ...prevState.slice(0, questionData.questionIndex - 1),
-        questionData,
-        ...prevState.slice(questionData.questionIndex, prevState.length),
-      ])
-      // it means question already exist and is only updated
+      // if true it means question already exist and is only updated
       if (
-        questions.filter(
-          (question) => (question.questionIndex = questionData.questionIndex)
+        quizData.questionList.filter(
+          (question) => question.questionIndex === questionData.questionIndex
         )
       ) {
         //update list of questions in quizData
@@ -146,7 +137,7 @@ function QuizCreator() {
           ],
         }))
       } else {
-        //add new question
+        //question don't exist - add new one
         setQuizData({
           ...quizData,
           questionList: [...quizData.questionList, questionData],
@@ -157,20 +148,23 @@ function QuizCreator() {
 
   const handleQuestionRemove = () => {
     let index = questionData.questionIndex
-    setQuestions((questions) => [
-      ...questions.slice(0, index - 1),
-      ...questions.slice(index, questions.length),
-    ])
+    setQuizData((prevState) => ({
+      ...prevState,
+      questionList: [
+        ...prevState.questionList.slice(0, index - 1),
+        ...prevState.questionList.slice(index, prevState.questionList.length),
+      ],
+    }))
     //update indexes
-    questions.forEach((question) => {
+    quizData.questionList.forEach((question) => {
       if (question.questionIndex > index) {
         question.questionIndex -= 1
       }
     })
-
-    if (questions.length > 1 && index > 1) {
+    //display previous question or new first one if first was deleted
+    if (quizData.questionList.length > 1 && index > 1) {
       showQuestion(index - 1)
-    } else if (questions.length > 1 && index === 1) {
+    } else if (quizData.questionList.length > 1 && index === 1) {
       showQuestion(1)
     } else {
       clear()
@@ -191,15 +185,13 @@ function QuizCreator() {
         { name: "c", body: "", isCorrect: false },
         { name: "d", body: "", isCorrect: false },
       ],
-      questionIndex: questions.length + 1,
+      questionIndex: quizData.questionList.length + 1,
     })
     setQuestionImage("")
   }
 
   const addNewQuestion = () => {
-    console.log(questions)
     setIsQuestionDataSave(false)
-    setQuizData({ ...quizData, numberOfQuestions: questions.length })
     clear()
     setIsQuestionTrueFalse(false)
     setCorrectAnswerCount(0)
@@ -210,12 +202,12 @@ function QuizCreator() {
   }
 
   const showQuestion = (index) => {
-    var question = questions.filter(
+    var question = quizData.questionList.find(
       (question) => question.questionIndex === index
     )
-    setQuestionData(question[0])
-    setQuestionImage(question[0].backgroundImage)
-    question[0].questionType === "True/False"
+    setQuestionData(question)
+    setQuestionImage(question.backgroundImage)
+    question.questionType === "True/False"
       ? setIsQuestionTrueFalse(true)
       : setIsQuestionTrueFalse(false)
   }
@@ -245,6 +237,12 @@ function QuizCreator() {
     setCorrectAnswerCount(0)
   }
 
+  if(user === null){
+    return <h1>Zaloguj się na konto nauczyciela, aby stworzyć quiz</h1>
+  } else if(user.result.userType !== "Teacher"){
+    return <h1>Quizy mogą tworzyć jedynie nauczyciele</h1>
+  }
+
   return (
     <section className={styles.section}>
       <div className={styles["question-list"]}>
@@ -264,8 +262,8 @@ function QuizCreator() {
           </button>
         </div>
         <div className={styles["question-list-container"]}>
-          {questions.length > 0 &&
-            questions.map((question) => (
+          {quizData.questionList.length > 0 &&
+            quizData.questionList.map((question) => (
               <QuestionListItem
                 onClick={() => showQuestion(question.questionIndex)}
                 key={question.questionIndex}
