@@ -19,6 +19,7 @@ const quizSchema = new mongoose.Schema({
   isPublic: { type: Boolean, required: true, default: true },
   tags: [String],
   likesCount: { type: Number, default: 0 },
+  dateCreated: {type: Date, default: new Date()},
   questionList: [
     {
       questionType: {
