@@ -19,6 +19,8 @@ export const deleteUser = (id) => API.delete(`/users/${id}`)
 
 export const fetchQuizes = () => API.get("/quizes")
 export const fetchPublicQuizes = () => API.get("/quizes/public")
+export const fetchTeacherQuizes = (teacherId) =>
+  API.get(`/quizes/teacher/${teacherId}`)
 export const fetchQuestions = (quizId) => API.get(`/quizes/${quizId}`)
 export const createQuiz = (newQuiz) => API.post("/quizes", newQuiz)
 export const createQuestion = (quizId, newQuestion) =>
@@ -27,6 +29,7 @@ export const updateQuestion = (quizId, questionId, updatedQuestion) =>
   API.patch(`/quizes/${quizId}/questions/${questionId}`, updatedQuestion)
 export const updateQuiz = (id, updatedQuiz) =>
   API.patch(`/quizes/${id}`, updatedQuiz)
+export const deleteQuiz = (id) => API.delete(`/quizes/${id}`)
 export const likeQuiz = (id) => API.patch(`/quizes/${id}/likeQuiz`, id)
 
 const AUTH_API = axios.create({ baseURL: "http://localhost:4000/api/auth" })

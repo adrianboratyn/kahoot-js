@@ -1,14 +1,22 @@
-import * as api from "../api";
-import { FETCH_ALL_QUIZES, FETCH_PUBLIC_QUIZES, CREATE_QUIZ, UPDATE_QUIZ, LIKE_QUIZ } from "../constants/actionTypes";
+import * as api from "../api"
+import {
+  FETCH_ALL_QUIZES,
+  FETCH_PUBLIC_QUIZES,
+  FETCH_TEACHER_QUIZES,
+  CREATE_QUIZ,
+  UPDATE_QUIZ,
+  LIKE_QUIZ,
+  DELETE_QUIZ
+} from "../constants/actionTypes"
 
 export const getQuizes = () => async (dispatch) => {
   try {
-    const { data } = await api.fetchQuizes();
-    dispatch({ type: FETCH_ALL_QUIZES, payload: data });
+    const { data } = await api.fetchQuizes()
+    dispatch({ type: FETCH_ALL_QUIZES, payload: data })
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const getPublicQuizes = () => async (dispatch) => {
   try {
@@ -19,23 +27,42 @@ export const getPublicQuizes = () => async (dispatch) => {
   }
 }
 
+export const getTeacherQuizes = (id) => async (dispatch) => {
+  try {
+    const { data } = await api.fetchTeacherQuizes(id)
+    dispatch({ type: FETCH_TEACHER_QUIZES, payload: data })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export const getQuestions = () => async (dispatch) => {
   try {
-    const { data } = await api.fetchQuestions();
-    dispatch({ type: FETCH_ALL_QUIZES, payload: data });
+    const { data } = await api.fetchQuestions()
+    dispatch({ type: FETCH_ALL_QUIZES, payload: data })
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 export const createQuiz = (quiz) => async (dispatch) => {
   try {
-    const { data } = await api.createQuiz(quiz);
-    dispatch({ type: CREATE_QUIZ, payload: data });
+    const { data } = await api.createQuiz(quiz)
+    dispatch({ type: CREATE_QUIZ, payload: data })
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
+
+
+export const deleteQuiz = (id) => async (dispatch) => {
+  try {
+    await api.deleteQuiz(id)
+    dispatch({ type: DELETE_QUIZ, payload: id })
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 //do poprawy
 // export const createQuestion = (quizId, question) => async (dispatch) => {
@@ -49,12 +76,12 @@ export const createQuiz = (quiz) => async (dispatch) => {
 
 export const updateQuiz = (id, quiz) => async (dispatch) => {
   try {
-    const { data } = await api.updateQuiz(id, quiz);
-    dispatch({ type: UPDATE_QUIZ, payload: data });
+    const { data } = await api.updateQuiz(id, quiz)
+    dispatch({ type: UPDATE_QUIZ, payload: data })
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-};
+}
 
 // export const updateQuestion = (quizId, questionId, user) => async (dispatch) => {
 //   try {
@@ -65,13 +92,12 @@ export const updateQuiz = (id, quiz) => async (dispatch) => {
 //   }
 // };
 
-export const likeQuiz =
-  (quizId) => async (dispatch) => {
-    const user = JSON.parse(localStorage.getItem("profile"))
-    try {
-      const { data } = await api.likeQuiz(quizId, user?.token)
-      dispatch({ type: LIKE_QUIZ, payload: data })
-    } catch (error) {
-      console.log(error)
-    }
+export const likeQuiz = (quizId) => async (dispatch) => {
+  const user = JSON.parse(localStorage.getItem("profile"))
+  try {
+    const { data } = await api.likeQuiz(quizId, user?.token)
+    dispatch({ type: LIKE_QUIZ, payload: data })
+  } catch (error) {
+    console.log(error)
   }
+}
