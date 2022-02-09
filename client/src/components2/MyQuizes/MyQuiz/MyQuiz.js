@@ -5,10 +5,16 @@ import { deleteQuiz } from "../../../actions/quiz"
 import moment from "moment"
 import DeleteIcon from "@material-ui/icons/Delete"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
+import { useHistory } from "react-router-dom"
 
 function MyQuiz({ quiz }) {
   const dispatch = useDispatch()
   const user = JSON.parse(localStorage.getItem("profile"))
+  const history = useHistory()
+
+  const openQuizPage = (e) => {
+    history.push(`/quizes/${quiz._id}`)
+  }
 
   return (
     <div className={styles["quiz-card"]}>
@@ -26,16 +32,20 @@ function MyQuiz({ quiz }) {
         </h3>
       </div>
       <div className={styles["card-body"]}>
-        <button>
-          <MoreHorizIcon fontSize="default" />
-        </button>
-        <button onClick={() => dispatch(deleteQuiz(quiz._id))}>
-          <DeleteIcon fontSize="small" />
-          Usuń
-        </button>
-        <h4 className={styles["quiz-tags"]}>
-          {quiz.tags.map((tag) => `#${tag} `)}
-        </h4>
+        <div>
+          <h4 className={styles["quiz-tags"]}>
+            {quiz.tags.map((tag) => `#${tag} `)}
+          </h4>
+          <div className={styles["card-buttons"]}>
+            <button onClick={openQuizPage}>
+              <MoreHorizIcon fontSize="default" />
+            </button>
+            <button onClick={() => dispatch(deleteQuiz(quiz._id))}>
+              <DeleteIcon fontSize="small" />
+              Usuń
+            </button>
+          </div>
+        </div>
         <h2 className={styles["quiz-title"]}>{quiz.name}</h2>
         <p className={styles["quiz-description"]}>{quiz.description}</p>
       </div>

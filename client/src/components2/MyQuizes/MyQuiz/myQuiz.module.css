@@ -14,8 +14,29 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-around;
+  justify-content: space-between;
   padding: 10px;
+  width: 100%;
+}
+
+.card-body > div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.card-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-self: flex-end;
+}
+
+.card-buttons button {
+  padding: 0 10px;
+  display: flex;
+  border: none;
+  background-color: inherit;
+  align-items: center;
 }
 
 .image-container {
@@ -66,13 +87,9 @@
   font-size: 20px;
 }
 
-.like-button{
-  color: blue;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  border: none;
-  background-color: inherit;
+.quiz-tags {
+  color: black;
+  font-size: 14px;
 }
 
 .quiz-card:hover {
