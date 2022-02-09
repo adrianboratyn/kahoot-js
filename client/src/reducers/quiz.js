@@ -1,5 +1,6 @@
 import {
   FETCH_ALL_QUIZES,
+  FETCH_PUBLIC_QUIZES,
   CREATE_QUIZ,
   UPDATE_QUIZ,
   LIKE_QUIZ
@@ -8,6 +9,7 @@ import {
 const reducer = (quizes = [], action) => {
   switch (action.type) {
     case FETCH_ALL_QUIZES:
+    case FETCH_PUBLIC_QUIZES:
       return action.payload
     case CREATE_QUIZ:
       return [...quizes, action.payload]

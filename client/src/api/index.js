@@ -18,6 +18,7 @@ export const updateUser = (id, updatedUser) =>
 export const deleteUser = (id) => API.delete(`/users/${id}`)
 
 export const fetchQuizes = () => API.get("/quizes")
+export const fetchPublicQuizes = () => API.get("/quizes/public")
 export const fetchQuestions = (quizId) => API.get(`/quizes/${quizId}`)
 export const createQuiz = (newQuiz) => API.post("/quizes", newQuiz)
 export const createQuestion = (quizId, newQuestion) =>

@@ -45,6 +45,15 @@ const getQuizes = async (req, res) => {
   }
 }
 
+const getPublicQuizes = async (req, res) => {
+  try {
+    const quizes = await Quiz.find({isPublic: true})
+    res.status(200).send(quizes)
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
 const getQuiz = async (req, res) => {
   let quiz
   try {
@@ -251,6 +260,7 @@ const likeQuiz = async (req, res) => {
 module.exports = {
   createQuiz,
   getQuizes,
+  getPublicQuizes,
   getQuiz,
   deleteQuiz,
   updateQuiz,

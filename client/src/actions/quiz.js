@@ -1,5 +1,5 @@
 import * as api from "../api";
-import { FETCH_ALL_QUIZES, CREATE_QUIZ, UPDATE_QUIZ, LIKE_QUIZ } from "../constants/actionTypes";
+import { FETCH_ALL_QUIZES, FETCH_PUBLIC_QUIZES, CREATE_QUIZ, UPDATE_QUIZ, LIKE_QUIZ } from "../constants/actionTypes";
 
 export const getQuizes = () => async (dispatch) => {
   try {
@@ -9,6 +9,15 @@ export const getQuizes = () => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const getPublicQuizes = () => async (dispatch) => {
+  try {
+    const { data } = await api.fetchPublicQuizes()
+    dispatch({ type: FETCH_PUBLIC_QUIZES, payload: data })
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 export const getQuestions = () => async (dispatch) => {
   try {

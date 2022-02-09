@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   createQuiz,
   getQuizes,
+  getPublicQuizes,
   getQuiz,
   updateQuiz,
   deleteQuiz,
@@ -19,6 +20,8 @@ router
     .route("/")
     .get(getQuizes)
     .post(createQuiz);
+
+router.get("/public", getPublicQuizes)
 
 router
     .route("/:id")
