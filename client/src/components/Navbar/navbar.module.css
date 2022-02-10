@@ -49,6 +49,8 @@ body {
   position: relative;
   padding: 1.5rem 1rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .nav__list-item::after {

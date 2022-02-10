@@ -9,7 +9,6 @@ import { useHistory } from "react-router-dom"
 
 function MyQuiz({ quiz }) {
   const dispatch = useDispatch()
-  const user = JSON.parse(localStorage.getItem("profile"))
   const history = useHistory()
 
   const openQuizPage = (e) => {

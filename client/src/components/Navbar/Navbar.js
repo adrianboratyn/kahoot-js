@@ -4,13 +4,16 @@ import { Link, useHistory, useLocation } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import decode from "jwt-decode"
 import * as actionType from "../../constants/actionTypes"
+import globe from "../../assets/globe.svg"
 
 function Navbar() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")))
   const dispatch = useDispatch()
   const location = useLocation()
   const history = useHistory()
-console.log(user);
+
+  const [isLanguageEnglish, setIsLanguageEnglish] = useState(false)
+
   const logout = () => {
     dispatch({ type: actionType.LOGOUT })
     history.push("/auth")
@@ -38,43 +41,61 @@ console.log(user);
               </Link>
             </li>
             <li className={styles["nav__list-item"]}>
-              About
+              {isLanguageEnglish ? "About" : "O nas"}
               <ul className={styles["nav__list-item-drop"]}>
-                <li>How it works</li>
-                <li>Ways to play</li>
+                <li>{isLanguageEnglish ? "How it works" : "Jak to działa"} </li>
+                <li>{isLanguageEnglish ? "Ways to play" : "Sposoby na grę"}</li>
               </ul>
             </li>
             <li className={styles["nav__list-item"]}>
-              Study
+              {isLanguageEnglish ? "Study" : "Ucz się"}
               <ul className={styles["nav__list-item-drop"]}>
-                <li>Public quizes</li>
-                <li>Test game</li>
+                <li>
+                  <Link to="/quizes">
+                    {isLanguageEnglish ? "Public quizes" : "Publiczne quizy"}
+                  </Link>
+                </li>
+                <li>{isLanguageEnglish ? "Test game" : "Przetestuj grę"}</li>
               </ul>
             </li>
           </ul>
         </div>
         <div className={styles["menu-left"]}>
           <ul className={styles.nav__list}>
-            <li className={styles["nav__list-item"]}>Contact</li>
-            <li className={styles["nav__list-item"]}>Play</li>
+            <li className={styles["nav__list-item"]}>
+              {isLanguageEnglish ? "Contact" : "Kontakt"}
+            </li>
+            <li className={styles["nav__list-item"]}>
+              {isLanguageEnglish ? "Play" : "Graj"}
+            </li>
             {user ? (
               <>
+                <li className={styles["nav__list-item"]}>
+                  <Link>{isLanguageEnglish ? "My Quizes" : "Moje Quizy"}</Link>
+                </li>
                 <li className={styles["nav__list-item"]}>
                   {user.result.firstName}
                 </li>
                 <li onClick={logout} className={styles["nav__list-item"]}>
-                  Log out
+                  {isLanguageEnglish ? "Log out" : "Wyloguj"}
                 </li>
               </>
             ) : (
               <Link to="/auth" className={styles["nav__list-item"]}>
-                Log in
+                {isLanguageEnglish ? "Log in" : "Zaloguj"}
               </Link>
             )}
             <li className={styles["nav__list-item"]}>
-              EN
+              <img src={globe} alt="" />
+              {isLanguageEnglish ? "EN" : "PL"}
               <ul className={styles["nav__list-item-drop"]}>
-                <li>Polski</li>
+                <li
+                  onClick={() =>
+                    setIsLanguageEnglish((prevState) => !prevState)
+                  }
+                >
+                  {isLanguageEnglish ? "Polski" : "English"}
+                </li>
               </ul>
             </li>
           </ul>
