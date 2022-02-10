@@ -6,7 +6,8 @@ import {
   CREATE_QUIZ,
   UPDATE_QUIZ,
   LIKE_QUIZ,
-  DELETE_QUIZ
+  DELETE_QUIZ,
+  FETCH_QUIZ
 } from "../constants/actionTypes"
 
 export const getQuizes = () => async (dispatch) => {
@@ -45,10 +46,11 @@ export const getQuestions = () => async (dispatch) => {
   }
 }
 
-export const createQuiz = (quiz) => async (dispatch) => {
+export const createQuiz = (quiz, history) => async (dispatch) => {
   try {
     const { data } = await api.createQuiz(quiz)
     dispatch({ type: CREATE_QUIZ, payload: data })
+    history.push(`/myquizes/${data._id}`)
   } catch (error) {
     console.log(error)
   }
@@ -97,6 +99,16 @@ export const likeQuiz = (quizId) => async (dispatch) => {
   try {
     const { data } = await api.likeQuiz(quizId, user?.token)
     dispatch({ type: LIKE_QUIZ, payload: data })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getQuiz = (id) => async (dispatch) => {
+  try {
+    const { data } = await api.fetchQuiz(id)
+
+    dispatch({ type: FETCH_QUIZ, payload: { quiz: data } })
   } catch (error) {
     console.log(error)
   }

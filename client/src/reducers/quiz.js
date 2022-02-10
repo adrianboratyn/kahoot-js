@@ -6,25 +6,39 @@ import {
   DELETE_QUIZ,
   UPDATE_QUIZ,
   LIKE_QUIZ,
+  FETCH_QUIZ
 } from "../constants/actionTypes"
 
-const reducer = (quizes = [], action) => {
+const reducer = (state={quizes:[]}, action) => {
   switch (action.type) {
     case FETCH_ALL_QUIZES:
     case FETCH_PUBLIC_QUIZES:
     case FETCH_TEACHER_QUIZES:
-      return action.payload
+      return {...state, quizes: action.payload}
     case CREATE_QUIZ:
-      return [...quizes, action.payload]
+        return { ...state, quizes: [...state.quizes, action.payload] }
+      // return [...quizes, action.payload]
     case UPDATE_QUIZ:
     case LIKE_QUIZ:
-      return quizes.map((quiz) =>
-        quiz._id === action.payload._id ? action.payload : quiz
-      )
+      return {
+        ...state,
+        quizes: state.quizes.map((quiz) =>
+          quiz._id === action.payload._id ? action.payload : quiz
+        ),
+      }
+      // return quizes.map((quiz) =>
+      //   quiz._id === action.payload._id ? action.payload : quiz
+      // )
     case DELETE_QUIZ:
-      return quizes.filter((quiz) => quiz._id !== action.payload)
+      return {
+        ...state,
+        quizes: state.quizes.filter((quiz) => quiz._id !== action.payload),
+      }
+      // return quizes.filter((quiz) => quiz._id !== action.payload)
+    case FETCH_QUIZ:
+      return { ...state, quiz: action.payload.quiz }
     default:
-      return quizes
+      return state
   }
 }
 

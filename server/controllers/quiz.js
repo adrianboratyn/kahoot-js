@@ -96,14 +96,27 @@ const updateQuiz = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).send(`No quiz with id: ${id}`)
   }
-
-  const { name, description, creatorId, pointsPerQuestion } = req.body
+  
+  const {
+    name,
+    backgroundImage,
+    description,
+    pointsPerQuestion,
+    isPublic,
+    tags,
+    questionList,
+  } = req.body
   const quiz = new Quiz({
     _id: id,
     name,
+    backgroundImage,
     description,
-    creatorId,
     pointsPerQuestion,
+    numberOfQuestions: questionList.length,
+    isPublic,
+    tags,
+    questionList,
+    dateCreated: new Date().toISOString(),
   })
 
   try {
