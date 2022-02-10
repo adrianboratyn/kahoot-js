@@ -37,7 +37,6 @@ function Quiz({ quiz }) {
     )
   }
 
-  console.log(quiz.likesCount);
   return (
     <div className={styles["quiz-card"]}>
       <div className={styles["image-container"]}>
