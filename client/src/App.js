@@ -1,25 +1,31 @@
 import React from "react";
-import Navbar from "./components2/Navbar/Navbar";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import Home from "./components2/Home/Home";
+import Navbar from "./components/Navbar/Navbar";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import Home from "./components/Home/Home";
 import Auth from "./components/Auth/Auth";
-import Footer from "./components2/Footer/Footer";
-import QuizCreator from "./components2/QuizCreator/QuizCreator";
-import Quizes from "./components2/Quizes/Quizes";
+import Footer from "./components/Footer/Footer";
+import QuizCreator from "./components/QuizCreator/QuizCreator";
+import Quizes from "./components/Quizes/Quizes";
+import MyQuizes from "./components/MyQuizes/MyQuizes";
 
 function App() {
+  const user = JSON.parse(localStorage.getItem('profile'))
+  console.log(user);
   return (
     <BrowserRouter>
       <Navbar />
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route path="/auth" exact component={Auth} />
-        <Route path="/quizCreator" exact component={QuizCreator} />
+        <Route path="/auth" exact component={() => (!user ? <Auth/> : <Redirect to="/"/>)} />
         <Route path="/quizes" exact component={Quizes} />
+        {/* to-do */}
+        {/* <Route path="/quizes/:id" exact component={QuizDetails} /> */}
+        <Route path="/myquizes/:id" exact component={QuizCreator} />
+        <Route path="/myquizes" exact component={MyQuizes} />
       </Switch>
       <Footer />
     </BrowserRouter>
-  );
+  )
 }
 
 export default App;
