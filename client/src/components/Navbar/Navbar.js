@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react"
 import styles from "./navbar.module.css"
 import { Link, useHistory, useLocation } from "react-router-dom"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import decode from "jwt-decode"
 import * as actionType from "../../constants/actionTypes"
 import globe from "../../assets/globe.svg"
+import { changeLanguage } from "../../actions/language"
 
 function Navbar() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")))
@@ -12,7 +13,7 @@ function Navbar() {
   const location = useLocation()
   const history = useHistory()
 
-  const [isLanguageEnglish, setIsLanguageEnglish] = useState(false)
+  const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
 
   const logout = () => {
     dispatch({ type: actionType.LOGOUT })
@@ -71,7 +72,9 @@ function Navbar() {
             {user ? (
               <>
                 <li className={styles["nav__list-item"]}>
-                  <Link>{isLanguageEnglish ? "My Quizes" : "Moje Quizy"}</Link>
+                  <Link to="/myquizes">
+                    {isLanguageEnglish ? "My Quizes" : "Moje Quizy"}
+                  </Link>
                 </li>
                 <li className={styles["nav__list-item"]}>
                   {user.result.firstName}
@@ -90,9 +93,9 @@ function Navbar() {
               {isLanguageEnglish ? "EN" : "PL"}
               <ul className={styles["nav__list-item-drop"]}>
                 <li
-                  onClick={() =>
-                    setIsLanguageEnglish((prevState) => !prevState)
-                  }
+                  onClick={() => {
+                    dispatch(changeLanguage(!isLanguageEnglish))
+                  }}
                 >
                   {isLanguageEnglish ? "Polski" : "English"}
                 </li>

@@ -6,9 +6,13 @@ export const FETCH_QUIZ = "FETCH_QUIZ"
 export const FETCH_ALL_QUIZES = "FETCH_ALL_QUIZES"
 export const FETCH_PUBLIC_QUIZES = "FETCH_PUBLIC_QUIZES"
 export const FETCH_TEACHER_QUIZES = "FETCH_TEACHER_QUIZES"
+
 export const CREATE_USER = "CREATE_USER"
 export const UPDATE_USER = "UPDATE_USER"
 export const DELETE_USER = "DELETE_USER"
 export const FETCH_ALL_USERS = "FETCH_ALL_USERS"
+
 export const AUTH = "AUTH";
 export const LOGOUT = "LOGOUT";
+
+export const CHANGE_LANGUAGE = "CHANGE_LANGUAGE";
