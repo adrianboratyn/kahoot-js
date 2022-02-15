@@ -71,7 +71,7 @@ const getQuiz = async (req, res) => {
     if (quiz == null) {
       return res.status(404).json({ message: "Quiz not found" })
     }
-    res.json(quiz)
+    res.status(200).json(quiz)
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
@@ -96,7 +96,7 @@ const updateQuiz = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).send(`No quiz with id: ${id}`)
   }
-  
+
   const {
     name,
     backgroundImage,
