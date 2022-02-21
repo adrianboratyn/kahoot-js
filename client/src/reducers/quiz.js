@@ -7,11 +7,17 @@ import {
   UPDATE_QUIZ,
   LIKE_QUIZ,
   FETCH_QUIZ,
-  FETCH__QUIZES_BY_SEARCH,
+  FETCH_QUIZES_BY_SEARCH,
+  START_LOADING,
+  END_LOADING
 } from "../constants/actionTypes"
 
-const reducer = (state = { quizes: [] }, action) => {
+const reducer = (state = { isLoading: true, quizes: [] }, action) => {
   switch (action.type) {
+    case START_LOADING:
+      return { ...state, isLoading: true }
+    case END_LOADING:
+      return { ...state, isLoading: false }
     case FETCH_PUBLIC_QUIZES:
       return {
         ...state,
@@ -21,7 +27,7 @@ const reducer = (state = { quizes: [] }, action) => {
       }
     case FETCH_ALL_QUIZES:
     case FETCH_TEACHER_QUIZES:
-    case FETCH__QUIZES_BY_SEARCH:
+    case FETCH_QUIZES_BY_SEARCH:
       return { ...state, quizes: action.payload }
     case CREATE_QUIZ:
       return { ...state, quizes: [...state.quizes, action.payload] }

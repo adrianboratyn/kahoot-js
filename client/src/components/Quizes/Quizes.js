@@ -4,7 +4,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { useHistory, useLocation } from "react-router-dom"
 import styles from "./quizes.module.css"
 import ChipInput from "material-ui-chip-input"
-import { AppBar, TextField, Button, Paper } from "@material-ui/core"
+import {
+  AppBar,
+  TextField,
+  Button,
+  Paper,
+  CircularProgress,
+} from "@material-ui/core"
 import useStyles from "./styles"
 import { getQuizesBySearch } from "../../actions/quiz"
 import Pagination from "../Pagination/Pagination"
@@ -17,7 +23,7 @@ function Quizes() {
   const classes = useStyles()
   const dispatch = useDispatch()
   const history = useHistory()
-  const { quizes } = useSelector((state) => state.quiz)
+  const { quizes, isLoading } = useSelector((state) => state.quiz)
   const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
 
   const query = useQuery()
@@ -28,13 +34,13 @@ function Quizes() {
   const [tags, setTags] = useState([])
 
   const searchPost = () => {
-    if (search.trim() !== "" || tags.length !==0) {
-      console.log(search.trim());
+    if (search.trim() !== "" || tags.length !== 0) {
+      console.log(search.trim())
       dispatch(getQuizesBySearch({ search, tags: tags.join(",") }))
       history.push(
         `/quizes/search?searchQuery=${search || "none"}&tags=${tags.join(",")}`
       )
-    } else{
+    } else {
       history.push("/quizes")
     }
   }
@@ -91,9 +97,11 @@ function Quizes() {
           {isLanguageEnglish ? "Search" : "Szukaj"}
         </Button>
       </AppBar>
-      {quizes.map((quiz) => (
-        <Quiz key={quiz._id} quiz={quiz} />
-      ))}
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        quizes.map((quiz) => <Quiz key={quiz._id} quiz={quiz} />)
+      )}
       {!searchQuery && !tags.length && (
         <Paper className={classes.pagination} elevation={6}>
           <Pagination page={page} />
