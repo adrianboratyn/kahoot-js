@@ -18,7 +18,7 @@ export const updateUser = (id, updatedUser) =>
 export const deleteUser = (id) => API.delete(`/users/${id}`)
 
 export const fetchQuizes = () => API.get("/quizes")
-export const fetchPublicQuizes = () => API.get("/quizes/public")
+export const fetchPublicQuizes = (page) => API.get(`/quizes/public?page=${page}`)
 export const fetchQuizesBySearch = (searchQuery) =>
   API.get(
     `/quizes/search?searchQuery=${searchQuery.search || "none"}&tags=${

@@ -46,9 +46,22 @@ const getQuizes = async (req, res) => {
 }
 
 const getPublicQuizes = async (req, res) => {
+  const { page } = req.query
   try {
+    const LIMIT = 6
+    const startIndex = (Number(page) - 1) * LIMIT // get the starting index of every page
+
+    const total = await Quiz.find({ isPublic: true }).countDocuments({})
     const quizes = await Quiz.find({ isPublic: true })
-    res.status(200).send(quizes)
+      .sort({ _id: -1 }) // sort from the newest
+      .limit(LIMIT)
+      .skip(startIndex) // skip first <startIndex> quizes
+    // const quizes = await Quiz.find({ isPublic: true })
+    res.status(200).send({
+      data: quizes,
+      currentPage: Number(page),
+      numberOfPages: Math.ceil(total / LIMIT),
+    })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
@@ -288,6 +301,7 @@ const getQuizesBySearch = async (req, res) => {
     const name = new RegExp(searchQuery, "i")
 
     const quizes = await Quiz.find({
+      isPublic: true,
       $or: [{ name }, { tags: { $in: tags.split(",") } }],
     })
 

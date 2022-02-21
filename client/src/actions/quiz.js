@@ -20,10 +20,12 @@ export const getQuizes = () => async (dispatch) => {
   }
 }
 
-export const getPublicQuizes = () => async (dispatch) => {
+export const getPublicQuizes = (page) => async (dispatch) => {
   try {
-    const { data } = await api.fetchPublicQuizes()
-    dispatch({ type: FETCH_PUBLIC_QUIZES, payload: data })
+    const {
+      data: { data, currentPage, numberOfPages },
+    } = await api.fetchPublicQuizes(page)
+    dispatch({ type: FETCH_PUBLIC_QUIZES, payload: {data, currentPage, numberOfPages} })
   } catch (error) {
     console.log(error)
   }
@@ -65,7 +67,6 @@ export const createQuiz = (quiz, history) => async (dispatch) => {
     console.log(error)
   }
 }
-
 
 export const deleteQuiz = (id) => async (dispatch) => {
   try {
