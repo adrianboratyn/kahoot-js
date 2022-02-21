@@ -5,6 +5,7 @@ const {
   createQuiz,
   getQuizes,
   getPublicQuizes,
+  getQuizesBySearch,
   getTeacherQuizes,
   getQuiz,
   updateQuiz,
@@ -23,6 +24,7 @@ router
     .post(createQuiz);
 
 router.get("/public", getPublicQuizes)
+router.get("/search", getQuizesBySearch)
 
 router.get("/teacher/:teacherId", getTeacherQuizes)
 

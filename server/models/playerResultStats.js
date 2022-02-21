@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
 const playerResultStatsSchema = new mongoose.Schema({
   gameId: {
@@ -19,6 +19,6 @@ const playerResultStatsSchema = new mongoose.Schema({
   percentageScoreValue: {
     type: Number,
   },
-});
+})
 
-module.exports = mongoose.model("PlayerResultStats", playerResultStatsSchema);
+module.exports = mongoose.model("PlayerResultStats", playerResultStatsSchema)

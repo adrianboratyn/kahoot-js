@@ -7,7 +7,8 @@ import {
   UPDATE_QUIZ,
   LIKE_QUIZ,
   DELETE_QUIZ,
-  FETCH_QUIZ
+  FETCH_QUIZ,
+  FETCH__QUIZES_BY_SEARCH,
 } from "../constants/actionTypes"
 
 export const getQuizes = () => async (dispatch) => {
@@ -23,6 +24,15 @@ export const getPublicQuizes = () => async (dispatch) => {
   try {
     const { data } = await api.fetchPublicQuizes()
     dispatch({ type: FETCH_PUBLIC_QUIZES, payload: data })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getQuizesBySearch = (searchQuery) => async (dispatch) => {
+  try {
+    const { data } = await api.fetchQuizesBySearch(searchQuery)
+    dispatch({ type: FETCH__QUIZES_BY_SEARCH, payload: data })
   } catch (error) {
     console.log(error)
   }

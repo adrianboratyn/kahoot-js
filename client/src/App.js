@@ -7,6 +7,7 @@ import Footer from "./components/Footer/Footer";
 import QuizCreator from "./components/QuizCreator/QuizCreator";
 import Quizes from "./components/Quizes/Quizes";
 import MyQuizes from "./components/MyQuizes/MyQuizes";
+import QuizDetails from "./components/QuizDetails/QuizDetails"
 
 function App() {
   const user = JSON.parse(localStorage.getItem('profile'))
@@ -18,8 +19,8 @@ function App() {
         <Route path="/" exact component={Home} />
         <Route path="/auth" exact component={() => (!user ? <Auth/> : <Redirect to="/"/>)} />
         <Route path="/quizes" exact component={Quizes} />
-        {/* to-do */}
-        {/* <Route path="/quizes/:id" exact component={QuizDetails} /> */}
+        <Route path="/quizes/search" exact component={Quizes} />
+        <Route path="/quizes/:id" exact component={QuizDetails} />
         <Route path="/myquizes/:id" exact component={QuizCreator} />
         <Route path="/myquizes" exact component={MyQuizes} />
       </Switch>

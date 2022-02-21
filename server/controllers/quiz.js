@@ -280,11 +280,29 @@ const likeQuiz = async (req, res) => {
   }
 }
 
+const getQuizesBySearch = async (req, res) => {
+  const { searchQuery, tags } = req.query
+
+  try {
+    //i -> ignore case, like ii, Ii, II
+    const name = new RegExp(searchQuery, "i")
+
+    const quizes = await Quiz.find({
+      $or: [{ name }, { tags: { $in: tags.split(",") } }],
+    })
+
+    res.status(200).send(quizes)
+  } catch (error) {
+    res.status(404).json({ message: error.message })
+  }
+}
+
 module.exports = {
   createQuiz,
   getQuizes,
   getPublicQuizes,
   getTeacherQuizes,
+  getQuizesBySearch,
   getQuiz,
   deleteQuiz,
   updateQuiz,
