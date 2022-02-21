@@ -12,7 +12,6 @@ function QuestionListItem({ number, type, name, time, image, onClick }) {
       <div className={styles["question-preview"]}>
         <h4 className={styles["question-preview-title"]}>
           {name}
-          {/* <!-- dodać funkcję, która pokazuje tytuł, ale tylko pierwsze 20 znaków --> */}
         </h4>
         <div className={styles["question-preview-time"]}>{time}</div>
         <div className={styles["question-preview-background-image"]}>
@@ -29,7 +28,6 @@ function QuestionListItem({ number, type, name, time, image, onClick }) {
           <div className={styles["answer-image"]}></div>
         </div>
       </div>
-      {/* <!-- ikonka kosza --> */}
     </div>
   )
 }

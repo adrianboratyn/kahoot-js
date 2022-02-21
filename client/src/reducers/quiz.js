@@ -17,7 +17,6 @@ const reducer = (state={quizes:[]}, action) => {
       return {...state, quizes: action.payload}
     case CREATE_QUIZ:
         return { ...state, quizes: [...state.quizes, action.payload] }
-      // return [...quizes, action.payload]
     case UPDATE_QUIZ:
     case LIKE_QUIZ:
       return {
@@ -26,15 +25,11 @@ const reducer = (state={quizes:[]}, action) => {
           quiz._id === action.payload._id ? action.payload : quiz
         ),
       }
-      // return quizes.map((quiz) =>
-      //   quiz._id === action.payload._id ? action.payload : quiz
-      // )
     case DELETE_QUIZ:
       return {
         ...state,
         quizes: state.quizes.filter((quiz) => quiz._id !== action.payload),
       }
-      // return quizes.filter((quiz) => quiz._id !== action.payload)
     case FETCH_QUIZ:
       return { ...state, quiz: action.payload.quiz }
     default:

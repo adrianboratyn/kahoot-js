@@ -107,7 +107,6 @@ export const likeQuiz = (quizId) => async (dispatch) => {
 export const getQuiz = (id) => async (dispatch) => {
   try {
     const { data } = await api.fetchQuiz(id)
-
     dispatch({ type: FETCH_QUIZ, payload: { quiz: data } })
   } catch (error) {
     console.log(error)

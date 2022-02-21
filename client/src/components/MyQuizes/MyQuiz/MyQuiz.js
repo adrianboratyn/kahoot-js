@@ -1,5 +1,5 @@
 import React from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import styles from "./myQuiz.module.css"
 import { deleteQuiz } from "../../../actions/quiz"
 import moment from "moment"
@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom"
 function MyQuiz({ quiz }) {
   const dispatch = useDispatch()
   const history = useHistory()
+  const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
 
   const openQuizPage = (e) => {
     history.push(`/myquizes/${quiz._id}`)
@@ -27,7 +28,7 @@ function MyQuiz({ quiz }) {
           style={{ backgroundImage: "url('" + quiz.backgroundImage + "')" }}
         ></div>
         <h3 className={styles["quiz-question-number"]}>
-          Pytania: {quiz.numberOfQuestions}
+          {isLanguageEnglish ? "Questions:" : "Pytania:"} {quiz.numberOfQuestions}
         </h3>
       </div>
       <div className={styles["card-body"]}>
@@ -41,7 +42,7 @@ function MyQuiz({ quiz }) {
             </button>
             <button onClick={() => dispatch(deleteQuiz(quiz._id))}>
               <DeleteIcon fontSize="small" />
-              Usuń
+              {isLanguageEnglish ? "Delete" : "Usuń"}
             </button>
           </div>
         </div>

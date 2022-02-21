@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { useSelector } from "react-redux"
 import MyQuiz from "./MyQuiz/MyQuiz"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { getTeacherQuizes, createQuiz } from "../../actions/quiz"
 import styles from "./myQuizes.module.css"
 import { useHistory } from "react-router-dom"
@@ -10,6 +9,7 @@ function MyQuizes() {
   const user = JSON.parse(localStorage.getItem("profile"))
   const dispatch = useDispatch()
   const history = useHistory()
+  const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
   const [quizData, setQuizData] = useState({
     name: "",
     creatorName: `${user?.result.firstName} ${user?.result.lastName}`,
@@ -40,10 +40,10 @@ function MyQuizes() {
   return (
     <div className={styles["quizes-list"]}>
       <div className={styles["quiz-settings"]}>
-        <h2>Stwórz nowy quiz </h2>
+        <h2>{isLanguageEnglish ? "Create new quiz" : "Stwórz nowy quiz"}</h2>
         <div className={styles["quiz-form"]}>
           <div className={styles["option-label"]}>
-            <label>Title</label>
+            <label>{isLanguageEnglish ? "Title" : "Nazwa"}</label>
           </div>
           <input
             value={quizData.name}
@@ -52,7 +52,7 @@ function MyQuizes() {
             onChange={handleQuizChange}
           />
           <div className={styles["option-label"]}>
-            <label>Description</label>
+            <label>{isLanguageEnglish ? "Description" : "Opis"}</label>
           </div>
           <input
             value={quizData.description}
@@ -72,7 +72,7 @@ function MyQuizes() {
                 color: isQuizPublic ? "white" : "rgb(110, 110, 110)",
               }}
             >
-              Publiczny
+              {isLanguageEnglish ? "Public" : "Publiczny"}
             </button>
             <button
               onClick={() => {
@@ -85,14 +85,14 @@ function MyQuizes() {
                 color: isQuizPublic ? "rgb(110, 110, 110)" : "white",
               }}
             >
-              Prywatny
+              {isLanguageEnglish ? "Private" : "Prywatny"}
             </button>
           </div>
           <button
             onClick={handleQuizSubmit}
             className={styles["submit-button"]}
           >
-            Stwórz quiz
+            {isLanguageEnglish ? "Create new quiz" : "Stwórz nowy quiz"}
           </button>
         </div>
       </div>

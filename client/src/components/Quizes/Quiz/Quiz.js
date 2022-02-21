@@ -1,31 +1,47 @@
 import React from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import styles from "./quiz.module.css"
 import { likeQuiz } from "../../../actions/quiz"
+import { useHistory } from "react-router-dom"
 import moment from "moment"
 import ThumbUpAltIcon from "@material-ui/icons/ThumbUpAlt"
 import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined"
 
 function Quiz({ quiz }) {
   const dispatch = useDispatch()
+  const history = useHistory()
   const user = JSON.parse(localStorage.getItem("profile"))
+  const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
+  const openQuizDetailsPage = (e) => {
+    history.push(`/quizes/${quiz._id}`)
+  }
   const Likes = () => {
     if (quiz.likesCount.length > 0) {
-      return quiz.likesCount.find((like) => like === user?.result?._id) 
-      ? (
-        <><ThumbUpAltIcon fontSize="small" />
+      return quiz.likesCount.find((like) => like === user?.result?._id) ? (
+        <>
+          <ThumbUpAltIcon fontSize="small" />
           &nbsp;
           {quiz.likesCount.length > 2
-            ? `You and ${quiz.likesCount.length - 1} others`
-            : `${quiz.likesCount.length} like${
+            ? isLanguageEnglish
+              ? `You and ${quiz.likesCount.length - 1} others`
+              : `Ty i ${quiz.likesCount.length - 1} innych`
+            : isLanguageEnglish
+            ? `${quiz.likesCount.length} like${
                 quiz.likesCount.length > 1 ? "s" : ""
-              }`}
+              }`
+            : `${quiz.likesCount.length} osób polubiło`}
         </>
       ) : (
         <>
           <ThumbUpAltOutlined fontSize="small" />
           &nbsp;{quiz.likesCount.length}{" "}
-          {quiz.likesCount.length === 1 ? "Like" : "Likes"}
+          {quiz.likesCount.length === 1
+            ? isLanguageEnglish
+              ? "Like"
+              : "Polubienie"
+            : isLanguageEnglish
+            ? "Likes"
+            : "Polubienia"}
         </>
       )
     }
@@ -45,11 +61,13 @@ function Quiz({ quiz }) {
           {moment(quiz.dateCreated).fromNow()}
         </h3>
         <div
+          onClick={openQuizDetailsPage}
           className={styles["quiz-image"]}
           style={{ backgroundImage: "url('" + quiz.backgroundImage + "')" }}
         ></div>
         <h3 className={styles["quiz-question-number"]}>
-          Pytania: {quiz.numberOfQuestions}
+          {isLanguageEnglish ? "Questions:" : "Pytania:"}{" "}
+          {quiz.numberOfQuestions}
         </h3>
       </div>
       <div className={styles["card-body"]}>

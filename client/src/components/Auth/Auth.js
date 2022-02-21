@@ -10,7 +10,7 @@ import {
 import useStyles from "./styles";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Input from "./Input";
 import { login, register } from "../../actions/auth";
 
@@ -31,6 +31,8 @@ function Auth() {
   const [formData, setFormData] = useState(initialState);
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -57,7 +59,13 @@ function Auth() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          {isSignup ? "Sign up" : "Sign in"}
+          {isSignup
+            ? isLanguageEnglish
+              ? "Sign up"
+              : "Zarejestruj się"
+            : isLanguageEnglish
+            ? "Sign in"
+            : "Zaloguj się"}
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -118,21 +126,31 @@ function Auth() {
             color="primary"
             className={classes.submit}
           >
-            {isSignup ? "Sign Up" : "Sign In"}
+            {isSignup
+              ? isLanguageEnglish
+                ? "Sign up"
+                : "Zarejestruj się"
+              : isLanguageEnglish
+              ? "Sign in"
+              : "Zaloguj się"}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
                 {isSignup
-                  ? "Already have an account? Sign in"
-                  : "Don't have an account? Sign Up"}
+                  ? isLanguageEnglish
+                    ? "Already have an account? Sign in"
+                    : "Masz już konto? Zaloguj się"
+                  : isLanguageEnglish
+                  ? "Don't have an account? Sign Up"
+                  : "Nie masz konta? Zarejestruj się"}
               </Button>
             </Grid>
           </Grid>
         </form>
       </Paper>
     </Container>
-  );
+  )
 }
 
 export default Auth;
