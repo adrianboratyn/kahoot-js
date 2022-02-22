@@ -21,3 +21,6 @@ export const AUTH = "AUTH";
 export const LOGOUT = "LOGOUT";
 
 export const CHANGE_LANGUAGE = "CHANGE_LANGUAGE";
+
+export const CREATE_GAME = "CREATE_GAME"
+export const FETCH_GAME = "FETCH_GAME"

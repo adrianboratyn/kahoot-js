@@ -40,6 +40,9 @@ export const likeQuiz = (id) => API.patch(`/quizes/${id}/likeQuiz`, id)
 export const commentQuiz = (comment, id) => API.post(`/quizes/${id}/commentQuiz`, {comment})
 export const fetchQuiz = (id) => API.get(`/quizes/${id}`, id)
 
+export const createGame = (newGame) => API.post("/games", newGame)
+export const fetchGame = (id) => API.get(`/games/${id}`, id)
+
 const AUTH_API = axios.create({ baseURL: "http://localhost:4000/api/auth" })
 
 export const login = (formData) => AUTH_API.post("/login", formData)

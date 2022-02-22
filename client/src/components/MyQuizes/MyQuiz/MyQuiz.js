@@ -2,6 +2,7 @@ import React from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styles from "./myQuiz.module.css"
 import { deleteQuiz } from "../../../actions/quiz"
+import { createGame } from "../../../actions/game"
 import moment from "moment"
 import DeleteIcon from "@material-ui/icons/Delete"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
@@ -14,6 +15,15 @@ function MyQuiz({ quiz }) {
 
   const openQuizPage = (e) => {
     history.push(`/myquizes/${quiz._id}`)
+  }
+
+  const addGame = () => {
+    let gameData = {
+      quizId: quiz._id,
+      isLive: true,
+      pin: "1234"
+    }
+    dispatch(createGame(gameData, history))
   }
 
   return (
@@ -37,8 +47,11 @@ function MyQuiz({ quiz }) {
             {quiz.tags.map((tag) => `#${tag} `)}
           </h4>
           <div className={styles["card-buttons"]}>
+            <button onClick={addGame}>
+              Start a game
+            </button>
             <button onClick={openQuizPage}>
-              <MoreHorizIcon fontSize="default" />
+              <MoreHorizIcon fontSize="medium" />
             </button>
             <button onClick={() => dispatch(deleteQuiz(quiz._id))}>
               <DeleteIcon fontSize="small" />
