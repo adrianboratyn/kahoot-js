@@ -7,15 +7,16 @@ import {
 } from "@material-ui/core/"
 import { useDispatch, useSelector } from "react-redux"
 import moment from "moment"
-import { useParams, useHistory } from "react-router-dom"
-
+import { useParams } from "react-router-dom"
+import Quiz from "../Quizes/Quiz/Quiz"
+import Question from "./Question/Question"
 import { getQuiz, getQuizesBySearch } from "../../actions/quiz"
 import useStyles from "./styles"
 
 const Post = () => {
   const { quiz, quizes, isLoading } = useSelector((state) => state.quiz)
+  const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
   const dispatch = useDispatch()
-  const history = useHistory()
   const classes = useStyles()
   const { id } = useParams()
 
@@ -25,13 +26,13 @@ const Post = () => {
 
   useEffect(() => {
     if (quiz) {
-      dispatch(getQuizesBySearch({ search: "none", tags: quiz?.tags.join(",") }))
+      dispatch(
+        getQuizesBySearch({ search: "none", tags: quiz?.tags.join(",") })
+      )
     }
   }, [quiz])
 
   if (!quiz) return null
-
-  const openPost = (_id) => history.push(`/quizes/${_id}`)
 
   if (isLoading) {
     return (
@@ -71,44 +72,29 @@ const Post = () => {
           <img className={classes.media} src={quiz.backgroundImage} alt="" />
         </div>
       </div>
-      {recommendedQuizes.length && (
-        <div className={classes.section}>
+      {quiz.questionList.length > 0 && (
+        <div>
           <Typography gutterBottom variant="h5">
-            You might also like:
+            {isLanguageEnglish ? "Question list:" : "Lista pytań:"}
           </Typography>
           <Divider />
-          <div className={classes.recommendedQuizes}>
-            {recommendedQuizes.map(
-              ({
-                name,
-                creatorName,
-                description,
-                likesCount,
-                backgroundImage,
-                _id,
-              }) => (
-                <div
-                  style={{ margin: "20px", cursor: "pointer" }}
-                  onClick={() => openPost(_id)}
-                  key={_id}
-                >
-                  <Typography gutterBottom variant="h6">
-                    {name}
-                  </Typography>
-                  <Typography gutterBottom variant="subtitle2">
-                    {creatorName}
-                  </Typography>
-                  <Typography gutterBottom variant="subtitle2">
-                    {description}
-                  </Typography>
-                  <Typography gutterBottom variant="subtitle1">
-                    Likes: {likesCount.length}
-                  </Typography>
-                  <img src={backgroundImage} alt="" width="200px" />
-                </div>
-              )
-            )}
-          </div>
+          {quiz.questionList.map((question) => (
+            <Question key={question._id} question={question} />
+          ))}
+        </div>
+      )}
+      <Divider />
+      {recommendedQuizes.length > 0 && (
+        <div>
+          <Typography gutterBottom variant="h5">
+            {isLanguageEnglish
+              ? "You might also like:"
+              : "Możesz również polubić:"}
+          </Typography>
+          <Divider />
+          {recommendedQuizes.map((quiz) => (
+            <Quiz key={quiz._id} quiz={quiz} />
+          ))}
         </div>
       )}
     </Paper>

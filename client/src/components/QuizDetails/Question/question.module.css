@@ -1,0 +1,28 @@
+.quiz-card {
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0px 2px 20px #cfd8dc;
+  border-radius: 0.2rem;
+  display: flex;
+  height: 9rem;
+  width: 70%;
+  margin: 20px;
+  transition: transform 200ms ease-in;
+}
+
+.quiz-card > div{
+    width: 25%;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding: 10px;
+}
+
+.quiz-description {
+  color: black;
+  font-size: 20px;
+}
