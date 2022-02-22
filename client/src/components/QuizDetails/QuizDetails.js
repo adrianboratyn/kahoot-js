@@ -10,6 +10,7 @@ import moment from "moment"
 import { useParams } from "react-router-dom"
 import Quiz from "../Quizes/Quiz/Quiz"
 import Question from "./Question/Question"
+import CommentSection from './CommentSection/CommentSection'
 import { getQuiz, getQuizesBySearch } from "../../actions/quiz"
 import useStyles from "./styles"
 
@@ -62,10 +63,14 @@ const Post = () => {
           <Typography gutterBottom variant="body1" component="p">
             {quiz.description}
           </Typography>
-          <Typography variant="h6">Created by: {quiz.creatorName}</Typography>
+          <Typography variant="h6">
+            {isLanguageEnglish ? "Created by:" : "Twórca: "}{quiz.creatorName}
+          </Typography>
           <Typography variant="body1">
             {moment(quiz.dateCreated).fromNow()}
           </Typography>
+          <Divider style={{ margin: "20px 0" }} />
+          <CommentSection quiz={quiz} />
           <Divider style={{ margin: "20px 0" }} />
         </div>
         <div className={classes.imageSection}>

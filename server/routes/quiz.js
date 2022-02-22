@@ -15,7 +15,8 @@ const {
   getQuestion,
   updateQuestion,
   deleteQuestion,
-  likeQuiz
+  likeQuiz,
+  commentQuiz
 } = require("../controllers/quiz");
 
 router
@@ -35,6 +36,7 @@ router
     .delete(deleteQuiz);
 
 router.patch("/:id/likeQuiz", likeQuiz)
+router.post("/:id/commentQuiz", commentQuiz)
 
 router
     .route('/:quizId/questions')

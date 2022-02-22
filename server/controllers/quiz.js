@@ -311,6 +311,22 @@ const getQuizesBySearch = async (req, res) => {
   }
 }
 
+const commentQuiz = async (req, res) => {
+  const { id } = req.params
+  const { comment } = req.body
+
+  try {
+    const quiz = await Quiz.findById(id)
+    quiz.comments.push(comment)
+    const updatedQuiz = await Quiz.findByIdAndUpdate(id, quiz, {
+      new: true,
+    })
+    res.status(200).send(updatedQuiz)
+  } catch (e) {
+    res.status(400).json({ message: error.message })
+  }
+}
+
 module.exports = {
   createQuiz,
   getQuizes,
@@ -326,4 +342,5 @@ module.exports = {
   updateQuestion,
   deleteQuestion,
   likeQuiz,
+  commentQuiz,
 }

@@ -9,7 +9,8 @@ import {
   FETCH_QUIZ,
   FETCH_QUIZES_BY_SEARCH,
   START_LOADING,
-  END_LOADING
+  END_LOADING,
+  COMMENT_QUIZ,
 } from "../constants/actionTypes"
 
 const reducer = (state = { isLoading: true, quizes: [] }, action) => {
@@ -38,6 +39,16 @@ const reducer = (state = { isLoading: true, quizes: [] }, action) => {
         quizes: state.quizes.map((quiz) =>
           quiz._id === action.payload._id ? action.payload : quiz
         ),
+      }
+    case COMMENT_QUIZ:
+      return {
+        ...state,
+        quizes: state.quizes.map((quiz) => {
+          if (quiz._id === action.payload._id) {
+            return action.payload
+          }
+          return quiz
+        }),
       }
     case DELETE_QUIZ:
       return {

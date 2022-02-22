@@ -11,6 +11,7 @@ import {
   FETCH_QUIZES_BY_SEARCH,
   START_LOADING,
   END_LOADING,
+  COMMENT_QUIZ
 } from "../constants/actionTypes"
 
 export const getQuizes = () => async (dispatch) => {
@@ -130,6 +131,16 @@ export const getQuiz = (id) => async (dispatch) => {
   try {
     const { data } = await api.fetchQuiz(id)
     dispatch({ type: FETCH_QUIZ, payload: { quiz: data } })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const commentQuiz = (comment, quizId) => async (dispatch) => {
+  try {
+    const { data } = await api.commentQuiz(comment, quizId)
+    dispatch({ type: COMMENT_QUIZ, payload: data })
+    return data.comments
   } catch (error) {
     console.log(error)
   }
