@@ -10,7 +10,7 @@ const gameSchema = new mongoose.Schema({
     ref: "Quiz",
   },
   pin: {
-    type: Number,
+    type: String,
   },
   isLive: {
     type: Boolean,

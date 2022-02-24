@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useRef} from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styles from "./myQuiz.module.css"
 import { deleteQuiz } from "../../../actions/quiz"
@@ -7,6 +7,7 @@ import moment from "moment"
 import DeleteIcon from "@material-ui/icons/Delete"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useHistory } from "react-router-dom"
+import { io } from "socket.io-client"
 
 function MyQuiz({ quiz }) {
   const dispatch = useDispatch()
@@ -16,14 +17,19 @@ function MyQuiz({ quiz }) {
   const openQuizPage = (e) => {
     history.push(`/myquizes/${quiz._id}`)
   }
+  // const socketId = useRef()
 
-  const addGame = () => {
+  const addGame = async () => {
     let gameData = {
       quizId: quiz._id,
       isLive: true,
-      pin: "1234"
+      pin: String(Math.floor(Math.random() * 9000) + 1000),
     }
-    dispatch(createGame(gameData, history))
+    const newGame = await dispatch(createGame(gameData, history))
+    console.log(newGame);
+    const socket = io("http://localhost:3001")
+    // socketId.current = socket.id
+    socket.emit("init-game", newGame) 
   }
 
   return (
@@ -38,7 +44,8 @@ function MyQuiz({ quiz }) {
           style={{ backgroundImage: "url('" + quiz.backgroundImage + "')" }}
         ></div>
         <h3 className={styles["quiz-question-number"]}>
-          {isLanguageEnglish ? "Questions:" : "Pytania:"} {quiz.numberOfQuestions}
+          {isLanguageEnglish ? "Questions:" : "Pytania:"}{" "}
+          {quiz.numberOfQuestions}
         </h3>
       </div>
       <div className={styles["card-body"]}>
@@ -47,9 +54,7 @@ function MyQuiz({ quiz }) {
             {quiz.tags.map((tag) => `#${tag} `)}
           </h4>
           <div className={styles["card-buttons"]}>
-            <button onClick={addGame}>
-              Start a game
-            </button>
+            <button onClick={addGame}>Start a game</button>
             <button onClick={openQuizPage}>
               <MoreHorizIcon fontSize="medium" />
             </button>

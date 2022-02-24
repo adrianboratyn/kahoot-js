@@ -3,18 +3,18 @@ const Game = require("../models/game");
 const PlayerResult = require("../models/playerResult");
 
 const createGame = async (req, res) => {
-  const { hostId, quizId, pin, isLive, playerList, date, playerResultList } =
+  const { quizId, isLive, playerList, playerResultList, pin } =
     req.body;
 
   const game = new Game({
-    hostId,
+    hostId: req.user.id,
     quizId,
+    date: new Date().toISOString(),
     pin,
     isLive,
     playerList,
-    date,
     playerResultList,
-  });
+  })
 
   try {
     const newGame = await game.save();

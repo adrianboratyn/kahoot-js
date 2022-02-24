@@ -42,6 +42,7 @@ export const fetchQuiz = (id) => API.get(`/quizes/${id}`, id)
 
 export const createGame = (newGame) => API.post("/games", newGame)
 export const fetchGame = (id) => API.get(`/games/${id}`, id)
+export const fetchGameByPin = (pin) => API.get(`/games/${pin}`, pin)
 
 const AUTH_API = axios.create({ baseURL: "http://localhost:4000/api/auth" })
 

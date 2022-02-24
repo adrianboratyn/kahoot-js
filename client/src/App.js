@@ -10,6 +10,7 @@ import MyQuizes from "./components/MyQuizes/MyQuizes";
 import QuizDetails from "./components/QuizDetails/QuizDetails"
 import HostScreen from "./components/Game/HostScreen/HostScreen"
 import PlayerScreen from "./components/Game/PlayerScreen/PlayerScreen"
+import JoinGame from "./components/Game/JoinGame/JoinGame";
 
 function App() {
   const user = JSON.parse(localStorage.getItem('profile'))
@@ -26,6 +27,7 @@ function App() {
         <Route path="/myquizes/:id" exact component={QuizCreator} />
         <Route path="/games/host/:id" exact component={HostScreen} />
         <Route path="/games/player/:id" exact component={PlayerScreen} />
+        <Route path="/games/joingame" exact component={JoinGame} />
         <Route path="/myquizes" exact component={MyQuizes} />
       </Switch>
       <Footer />
