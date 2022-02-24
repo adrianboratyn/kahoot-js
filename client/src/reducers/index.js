@@ -4,11 +4,13 @@ import auth from "./auth";
 import quiz from "./quiz";
 import language from "./language"
 import games from "./games"
+import playerResults from "./playerResults";
 
 export default combineReducers({
   users,
   auth,
   quiz,
   language,
-  games
+  games,
+  playerResults
 })
