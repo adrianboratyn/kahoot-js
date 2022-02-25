@@ -9,10 +9,6 @@ const playerResultSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Game",
   },
-  quizId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Quiz",
-  },
   score: {
     type: Number,
     default: 0,

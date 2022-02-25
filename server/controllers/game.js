@@ -90,8 +90,6 @@ const updateGame = async (req, res) => {
 
 const addPlayer = async (req, res) => {
   const { gameId } = req.params
-  console.log(req.body);
-  console.log(req.params);
   const { playerId } = req.body
 
   let game

@@ -27,7 +27,7 @@ router
 
 router
     .route("/:playerResultId/answers")
-    .post(addAnswer)
+    .patch(addAnswer)
     .get(getAnswers);
 
 router
