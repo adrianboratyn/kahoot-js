@@ -1,0 +1,25 @@
+.page {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 100%;
+  position: relative;
+  padding: 0;
+}
+
+.question-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 20px;
+  width: 90%;
+  height: 600px;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.question-preview h1 {
+  font-size: 90px;
+}
