@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { CircularProgress } from "@material-ui/core"
 import { createPlayerResult } from "../../../actions/playerResult"
 import { addPlayer } from "../../../actions/game"
+import styles from "./joinGame.module.css"
 
 function JoinGame() {
   const user = JSON.parse(localStorage.getItem("profile"))
@@ -30,7 +31,6 @@ function JoinGame() {
   const result = (message, playerId, gameId) => {
     if (message === "correct") {
       dispatch(addPlayer(gameId, playerId))
-      alert("correct")
       setIsPlayerAdded(true)
     } else {
       alert("Podałeś zły pin lub gra nie istnieje")
@@ -50,19 +50,17 @@ function JoinGame() {
   }
 
   return (
-    <div>
+    <div className={styles.page}>
       {!isPlayerAdded ? (
-        <div>
-          <h3>Join Game</h3>
-          <h4>Write a pin</h4>
-          <label>PIN</label>
-          <input type="text" ref={pinRef} />
+        <div className={styles.section}>
+          <h2>Join Game</h2>
+          <input type="text" ref={pinRef}  placeholder="Write your pin here"/>
           <button onClick={joinGame}>Join a Game</button>
         </div>
       ) : (
-        <div>
-          <h1>You joined the game</h1>
-          <h1>Waiting on a host to start the game</h1>
+        <div className={styles.section}>
+          <h2>You joined the game</h2>
+          <h4>Waiting on a host to start the game</h4>
           <CircularProgress />
         </div>
       )}
