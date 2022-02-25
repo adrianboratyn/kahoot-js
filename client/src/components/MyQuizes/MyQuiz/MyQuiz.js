@@ -1,4 +1,4 @@
-import React, {useRef} from "react"
+import React from "react"
 import { useDispatch, useSelector } from "react-redux"
 import styles from "./myQuiz.module.css"
 import { deleteQuiz } from "../../../actions/quiz"
@@ -7,17 +7,15 @@ import moment from "moment"
 import DeleteIcon from "@material-ui/icons/Delete"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useHistory } from "react-router-dom"
-import { io } from "socket.io-client"
 
 function MyQuiz({ quiz }) {
   const dispatch = useDispatch()
   const history = useHistory()
   const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
-
+  const socket = useSelector((state) => state.socket.socket)
   const openQuizPage = (e) => {
     history.push(`/myquizes/${quiz._id}`)
   }
-  // const socketId = useRef()
 
   const addGame = async () => {
     let gameData = {
@@ -26,9 +24,6 @@ function MyQuiz({ quiz }) {
       pin: String(Math.floor(Math.random() * 9000) + 1000),
     }
     const newGame = await dispatch(createGame(gameData, history))
-    console.log(newGame);
-    const socket = io("http://localhost:3001")
-    // socketId.current = socket.id
     socket.emit("init-game", newGame) 
   }
 

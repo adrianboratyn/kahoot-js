@@ -10,6 +10,8 @@ function MyQuizes() {
   const dispatch = useDispatch()
   const history = useHistory()
   const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
+  const state = useSelector((state) => state.socket.socket)
+  console.log(state)
   const [quizData, setQuizData] = useState({
     name: "",
     creatorName: `${user?.result.firstName} ${user?.result.lastName}`,

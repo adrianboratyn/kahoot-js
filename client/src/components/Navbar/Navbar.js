@@ -12,22 +12,25 @@ function Navbar() {
   const dispatch = useDispatch()
   const location = useLocation()
   const history = useHistory()
-
   const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
+  const socket = useSelector((state) => state.socket.socket)
 
   const logout = () => {
     dispatch({ type: actionType.LOGOUT })
     history.push("/auth")
     setUser(null)
+    socket.disconnect()
   }
 
   useEffect(() => {
     const token = user?.accessToken
     if (token) {
       const decodedToken = decode(token)
-      console.log(decodedToken);
+      console.log(decodedToken)
 
-      if (decodedToken.exp * 1000 < new Date().getTime()) logout()
+      if (decodedToken.exp * 1000 < new Date().getTime()) {
+        logout()
+      }
     }
     setUser(JSON.parse(localStorage.getItem("profile")))
   }, [location])
