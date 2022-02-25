@@ -35,11 +35,11 @@ function Auth() {
   const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (isSignup) {
-      dispatch(register(formData, history));
+      dispatch(register(formData, history))
     } else {
-      dispatch(login(formData, history));
+      dispatch(login(formData, history))
     }
   };
   const handleChange = (e) => {

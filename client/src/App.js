@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "./components/Navbar/Navbar";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import Home from "./components/Home/Home";
@@ -11,10 +11,20 @@ import QuizDetails from "./components/QuizDetails/QuizDetails"
 import HostScreen from "./components/Game/HostScreen/HostScreen"
 import PlayerScreen from "./components/Game/PlayerScreen/PlayerScreen"
 import JoinGame from "./components/Game/JoinGame/JoinGame";
+import { io } from "socket.io-client"
+import { useDispatch } from "react-redux"
+import {createSocket} from "./actions/socket"
 
 function App() {
   const user = JSON.parse(localStorage.getItem('profile'))
-  console.log(user);
+  const dispatch = useDispatch()
+  useEffect(()=>{
+    const socket = io("http://localhost:3001")
+    dispatch(createSocket(socket))
+
+    return () => socket.disconnect()
+  }, [dispatch])
+
   return (
     <BrowserRouter>
       <Navbar />
