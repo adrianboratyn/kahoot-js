@@ -42,10 +42,11 @@ export const fetchQuiz = (id) => API.get(`/quizes/${id}`, id)
 
 export const createGame = (newGame) => API.post("/games", newGame)
 export const fetchGame = (id) => API.get(`/games/${id}`, id)
+export const addPlayer = (gameId, playerId) => API.patch(`/games/${gameId}/players`, {playerId})
 
 export const createPlayerResult = (newPlayerResult) => API.post("/playerResults", newPlayerResult)
 export const fetchPlayerResult = (id) => API.get(`/playerResults/${id}`, id)
-export const addAnswer = (newAnswer, id) => API.post(`/playerResults/${id}/answers`, newAnswer)
+export const addAnswer = (newAnswer, id) => API.patch(`/playerResults/${id}/answers`, {newAnswer})
 
 const AUTH_API = axios.create({ baseURL: "http://localhost:4000/api/auth" })
 

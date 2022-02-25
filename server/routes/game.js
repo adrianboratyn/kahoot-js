@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+const express = require("express")
+const router = express.Router()
 
 const {
   createGame,
@@ -7,17 +7,22 @@ const {
   getGame,
   updateGame,
   deleteGame,
-} = require("../controllers/game");
+  addPlayer,
+} = require("../controllers/game")
 
 router
     .route("/")
     .get(getGames)
-    .post(createGame);
+    .post(createGame)
+
+router
+    .route("/:gameId/players")
+    .patch(addPlayer)
 
 router
     .route("/:id")
     .get(getGame)
     .patch(updateGame)
-    .delete(deleteGame);
+    .delete(deleteGame)
 
 module.exports = router

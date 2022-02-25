@@ -1,29 +1,35 @@
 import React, { useEffect, useState, useRef } from "react"
-import { io } from "socket.io-client"
 import { useHistory } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
 import { CircularProgress } from "@material-ui/core"
-
-const socket = io("http://localhost:3001")
+import { createPlayerResult } from "../../../actions/playerResult"
+import { addPlayer } from "../../../actions/game"
 
 function JoinGame() {
   const user = JSON.parse(localStorage.getItem("profile"))
+  const dispatch = useDispatch()
   const [isPlayerAdded, setIsPlayerAdded] = useState(false)
   const pinRef = useRef("")
   const history = useHistory()
+  const socket = useSelector((state) => state.socket.socket)
 
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("new user connected with id " + socket.id)
+  useEffect(()=>{
+    socket?.on("move-to-game-page", (gameId) => {
+      dispatch(
+        createPlayerResult({
+          playerId: user.result._id,
+          gameId: gameId,
+          score: 0,
+          answers: [],
+        })
+      )
+      history.push(`/games/player/${gameId}`)
     })
-    socket.on("move-to-game-page", (gameId) => {
-      console.log("works")
-      history.push(`games/player/${gameId}`)
-    })
-  }, [])
+  }, [socket, dispatch, history, user.result._id])
 
-  const result = (message, id) => {
+  const result = (message, playerId, gameId) => {
     if (message === "correct") {
-      //addPlayer do playerList in game
+      dispatch(addPlayer(gameId, playerId))
       alert("correct")
       setIsPlayerAdded(true)
     } else {
@@ -37,8 +43,8 @@ function JoinGame() {
       user.result,
       socket.id,
       pinRef.current.value,
-      (message, id) => {
-        result(message, id)
+      (message, playerId, gameId) => {
+        result(message, playerId, gameId)
       }
     )
   }
