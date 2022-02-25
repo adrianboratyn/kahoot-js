@@ -1,43 +1,31 @@
 import React, { useState, useEffect } from "react"
+import styles from "./waitingRoom.module.css"
 
-
-import { io } from "socket.io-client"
-
-const socket = io("http://localhost:3001")
-
-function WaitingRoom({pin}) {
-  
-  
+function WaitingRoom({pin, socket}) {
   const [playerList, setPlayerList] = useState([])
 
   useEffect(() => {
     socket.on("player-added", (player) => {
-      console.log(player);
       setPlayerList([ ...playerList, player ])
     })
-  }, [playerList])
+  }, [playerList, socket])
 
-  
-
-
-  console.log(playerList)
-
-  const startGame = () =>{
-    socket.emit("start-game")
-  }
   return (
-    <div>
+    <div className={styles["waiting-room"]}>
       <h1>Waiting Room</h1>
       <h2>Show PIN to your students: {pin} </h2>
-      <div>
-        <h2>Player List</h2>
+      <div className={styles["players-list"]}>
+        <h3>Player List</h3>
         {playerList.length > 0 ? (
-          playerList.map((player) => <h3>{player.userName}</h3>)
+          playerList.map((player) => (
+            <div className={styles["player"]} key={player.socketId}>
+              <h4> Uczeń: {player.userName}</h4>
+            </div>
+          ))
         ) : (
-          <h2>No players</h2>
+          <h4>No players yet</h4>
         )}
-      </div> 
-      <button onClick={startGame}>Start a game</button>
+      </div>
     </div>
   )
 }
