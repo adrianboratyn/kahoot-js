@@ -13,25 +13,25 @@
   flex-direction: column;
 }
 
-.waiting-room h1, h2, h3, h4 {
+.title, .header, .players-list-title, .players-list-student {
   font-weight: 900;
   color: rgb(51, 51, 51);
   margin: 5px;
 }
 
-.waiting-room h1 {
+.title {
   font-size: 2.1 rem;
 }
 
-.waiting-room h2 {
+.header {
   font-size: 1.6 rem;
 }
 
-.player-list h3 {
+.players-list-title{
   font-size: 1.4 rem;
 }
 
-.player-list h4 {
+.players-list-student {
   font-size: 1.4 rem;
 }
 

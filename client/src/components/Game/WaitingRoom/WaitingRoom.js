@@ -12,14 +12,17 @@ function WaitingRoom({pin, socket}) {
 
   return (
     <div className={styles["waiting-room"]}>
-      <h1>Waiting Room</h1>
-      <h2>Show PIN to your students: {pin} </h2>
+      <h1 className={styles["title"]}>Waiting Room</h1>
+      <h2 className={styles["header"]}>Show PIN to your students: {pin} </h2>
       <div className={styles["players-list"]}>
-        <h3>Player List</h3>
+        <h3 className={styles["players-list-title"]}>Player List</h3>
         {playerList.length > 0 ? (
           playerList.map((player) => (
             <div className={styles["player"]} key={player.socketId}>
-              <h4> Uczeń: {player.userName}</h4>
+              <h4 className={styles["players-list-student"]}>
+                {" "}
+                Uczeń: {player.userName}
+              </h4>
             </div>
           ))
         ) : (
