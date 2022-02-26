@@ -282,7 +282,7 @@ const likeQuiz = async (req, res) => {
     if (index === -1) {
       quiz.likesCount.push(req.user.id)
     } else {
-      quiz.likesCount = quiz.likesCount.filter(
+      quiz.likesCount = quiz.likesCount.filter( 
         (id) => id !== String(req.user.id)
       )
     }

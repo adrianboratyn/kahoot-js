@@ -17,6 +17,7 @@ import { createSocket } from "./actions/socket"
 
 function App() {
   const user = JSON.parse(localStorage.getItem("profile"))
+  console.log(user);
   const dispatch = useDispatch()
   useEffect(() => {
     const socket = io("http://localhost:3001")
@@ -30,7 +31,7 @@ function App() {
       <Navbar />
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route path="/auth" exact component={() => (!user ? <Auth /> : <Redirect to="/" />)} />
+        <Route path="/auth" exact component={() => (user === null ? <Auth /> : <Redirect to="/" />)} />
         <Route path="/quizes" exact component={Quizes} />
         <Route path="/quizes/search" exact component={Quizes} />
         <Route path="/quizes/:id" exact component={QuizDetails} />

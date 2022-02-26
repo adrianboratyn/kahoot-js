@@ -118,9 +118,8 @@ export const updateQuiz = (id, quiz) => async (dispatch) => {
 // };
 
 export const likeQuiz = (quizId) => async (dispatch) => {
-  const user = JSON.parse(localStorage.getItem("profile"))
   try {
-    const { data } = await api.likeQuiz(quizId, user?.token)
+    const { data } = await api.likeQuiz(quizId)
     dispatch({ type: LIKE_QUIZ, payload: data })
   } catch (error) {
     console.log(error)
