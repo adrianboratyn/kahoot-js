@@ -344,6 +344,7 @@ function QuizCreator() {
           <div className={styles["answer-field"]}>
             <AnswerInput
               value={questionData.answerList[0].body}
+              name={"a"}
               onChange={(e) => {
                 isQuestionTrueFalse
                   ? updateAnswer(e.target.name, "True", 0)
@@ -366,6 +367,7 @@ function QuizCreator() {
           <div className={styles["answer-field"]}>
             <AnswerInput
               value={questionData.answerList[1].body}
+              name={"b"}
               onChange={(e) => {
                 isQuestionTrueFalse
                   ? updateAnswer(e.target.name, "False", 1)
@@ -390,6 +392,7 @@ function QuizCreator() {
               <div className={styles["answer-field"]}>
                 <AnswerInput
                   value={questionData.answerList[2].body}
+                  name={"c"}
                   onChange={(e) =>
                     updateAnswer(e.target.name, e.target.value, 2)
                   }
@@ -410,6 +413,7 @@ function QuizCreator() {
               <div className={styles["answer-field"]}>
                 <AnswerInput
                   value={questionData.answerList[3].body}
+                  name={"d"}
                   onChange={(e) =>
                     updateAnswer(e.target.name, e.target.value, 3)
                   }
