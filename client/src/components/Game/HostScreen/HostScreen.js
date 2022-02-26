@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from "react-redux"
 import { getGame } from "../../../actions/game"
 import { getQuiz } from "../../../actions/quiz"
 import styles from "./hostScreen.module.css"
+import Question from "../Question/Question"
 
 function HostScreen() {
   const socket = useSelector((state) => state.socket.socket)
   const [isGameStarted, setIsGameStarted] = useState(false)
-  const [isQuestionDisplayed, setIsQuestionDisplayed] = useState(false)
+  // const [isQuestionDisplayed, setIsQuestionDisplayed] = useState(false)
   const [isCountdownStarted, setIsCountdownStarted] = useState(false)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [timer, setTimer] = useState(0)
@@ -47,86 +48,70 @@ function HostScreen() {
   }, [dispatch, game])
 
   useEffect(() => {
-    socket.on("question-countdown", () => {
-      console.log("hh")
-      // startCountdown()
-    })
-
-    socket.on("send-question-to-host", (question, time) => {
-      setQuestionData(question)
-      setIsQuestionDisplayed((prevstate) => !prevstate)
-      setCurrentQuestionIndex((prevstate) => prevstate + 1)
-      setTimer(time)
-      // startCountdown()
-    })
-  }, [])
-
-  // useEffect(() => {
-  //   socket.on("host-start-game", () => {
-  //     socket.emit("question-preview", () => {
-  //       //startCountdown()
-  //     })
-  //   })
-  // }, [socket])
-
-  useEffect(() => {
     setTimer(5)
   }, [])
 
   const startGame = () => {
     socket.emit("start-game", quiz)
     socket.emit("question-preview", () => {
-      startPreviewCountdown(5)
+      startPreviewCountdown(5, currentQuestionIndex)
     })
-    setIsGameStarted(prevstate => !prevstate)
-    setIsCountdownStarted(prevstate => !prevstate)
+    setIsGameStarted((prevstate) => !prevstate)
+    setIsCountdownStarted((prevstate) => !prevstate)
   }
 
-  // const showTimer = () => {
-  //   console.log("ss")
-  //   socket.emit("show-timer")
-  //   startCountdown()
-  //   // setIsCountdownStarted((prevstate) => !prevstate)
-  // }
-
-  const startPreviewCountdown = (seconds) => {
+  const startPreviewCountdown = (seconds, index) => {
     let time = seconds
     let interval = setInterval(() => {
       setTimer(time)
       if (time === 0) {
         clearInterval(interval)
-        let question = quiz.questionList[currentQuestionIndex]
+        let question = quiz.questionList[index]
         socket.emit("send-question-to-socket", question)
-        setIsCountdownStarted(prevstate => !prevstate)
-        displayQuestion(currentQuestionIndex)
+        displayQuestion(index)
+        setIsCountdownStarted((prevstate) => !prevstate)
         // socket.emit("start-question-timer", () => {
-        //   startQuestionCountdown(quiz.questionList[currentQuestionIndex].answerTime)
+        //   startQuestionCountdown(
+        //     quiz.questionList[index].answerTime
+        //   )
         // })
       }
       time--
     }, 1000)
   }
 
+  const startQuestionCountdown = (seconds, index) => {
+    let time = seconds
+    let interval = setInterval(() => {
+      setTimer(time)
+      if (time === 0) {
+        clearInterval(interval)
+        // let question = quiz.questionList[currentQuestionIndex]
+        // socket.emit("send-question-to-socket", question)
+        // displayQuestion(currentQuestionIndex)
+        setIsCountdownStarted((prevstate) => !prevstate)
+        socket.emit("question-preview", () => {
+          startPreviewCountdown(5, index)
+        })
+      }
+      time--
+    }, 1000)
+  }
+  // const displayQuestionResult = () => {}
+
+  // const displayCurrentLeaderBoard = () => {}
+
   const displayQuestion = (index) => {
-    setQuestionData( quiz.questionList[index]
-      // questionType: quiz.questionList[index].questionType,
-      // pointType: quiz.questionList[index].pointType,
-      // answerTime: quiz.questionList[index].answerTime,
-      // backgroundImage: quiz.questionList[index].backgroundImage,
-      // question: quiz.questionList[index].question,
-      // answerList: [
-      //   {
-      //     name: "a",
-      //     body: quiz.questionList[index].answerList[0].body,
-      //     isCorrect: quiz.questionList[index].answerList[0].isCorrect,
-      //   },
-      //   {
-      //     body: quiz.questionList[index].answerList[1].body,
-      //     isCorrect: quiz.questionList[index].answerList[1].isCorrect,
-      //   }
-      // ],
-      // questionIndex: currentQuestionIndex + 1,
-    )
+    setQuestionData(quiz.questionList[index])
+    setCurrentQuestionIndex((prevstate) => prevstate + 1)
+    if (index === quiz.questionList.length) {
+      socket.emit("show-leaderboard")
+    } else {
+      let time = quiz.questionList[index].answerTime
+      socket.emit("start-question-timer", time, () => {
+        startQuestionCountdown(time, index + 1)
+      })
+    }
   }
 
   return (
@@ -145,10 +130,13 @@ function HostScreen() {
       )}
       {isGameStarted && !isCountdownStarted && (
         <div className={styles["question-preview"]}>
-            <h3>{questionData.question}</h3>
+          <Question
+            key={questionData.questionIndex}
+            question={questionData}
+            timer={timer}
+          />
         </div>
       )}
-    
     </div>
   )
 }

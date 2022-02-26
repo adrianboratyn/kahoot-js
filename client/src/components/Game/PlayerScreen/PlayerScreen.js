@@ -47,6 +47,9 @@ function PlayerScreen() {
     socket.on("host-start-preview", () => {
       startPreviewCountdown(5)
     })
+    socket.on("host-start-question-timer", (time) => {
+      startQuestionCountdown(time)
+    })
   }, [])
 
   const startPreviewCountdown = (seconds) => {
@@ -61,6 +64,24 @@ function PlayerScreen() {
         // displayQuestion(currentQuestionIndex)
         // socket.emit("start-question-timer", () => {
         //   startQuestionCountdown(quiz.questionList[currentQuestionIndex].answerTime)
+        // })
+      }
+      time--
+    }, 1000)
+  }
+
+  const startQuestionCountdown = (seconds) => {
+    let time = seconds
+    let interval = setInterval(() => {
+      setTimer(time)
+      if (time === 0) {
+        clearInterval(interval)
+        // let question = quiz.questionList[currentQuestionIndex]
+        // socket.emit("send-question-to-socket", question)
+        // displayQuestion(currentQuestionIndex)
+        setIsCountdownStarted((prevstate) => !prevstate)
+        // socket.emit("question-preview", () => {
+        //   startPreviewCountdown(5, index)
         // })
       }
       time--
@@ -84,6 +105,7 @@ function PlayerScreen() {
       {isGameStarted && !isCountdownStarted && (
         <div className={styles["question-preview"]}>
           <h3>Tu będzie pytanie</h3>
+          <h1>{timer}</h1>
         </div>
       )}
     </div>
