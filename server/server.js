@@ -15,6 +15,7 @@ const userRouter = require("./routes/user");
 const quizRouter = require("./routes/quiz");
 const gameRouter = require("./routes/game");
 const playerResultRouter = require("./routes/playerResult");
+const leaderboardRouter = require("./routes/leaderboard");
 
 mongoose.connect(process.env.DATABASE_URL);
 
@@ -32,6 +33,7 @@ app.use("/api/users", userRouter);
 app.use("/api/quizes", quizRouter);
 app.use("/api/games", gameRouter);
 app.use("/api/playerResults", playerResultRouter);
+app.use("/api/leaderboard", leaderboardRouter)
 
 app.listen(process.env.PORT, () =>
   console.log(`Server started on port ${process.env.PORT}`)
