@@ -20,18 +20,18 @@ const playerResultSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
       },
-      answers: [
-        {
-          name: { type: String },
-          body: { type: String },
-        },
+      answers: [ String
+        // {
+        //   name: { type: String },
+        //   body: { type: String },
+        // },
       ],
-      correctAnswers: [
-        {
-          name: { type: String },
-          body: { type: String },
-        },
-      ],
+      // correctAnswers: [
+      //   {
+      //     name: { type: String },
+      //     body: { type: String },
+      //   },
+      // ],
       time: { type: Number },
       points: {
         type: Number,

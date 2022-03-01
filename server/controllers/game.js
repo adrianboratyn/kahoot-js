@@ -95,7 +95,6 @@ const addPlayer = async (req, res) => {
   let game
   try {
     game = await Game.findById(gameId)
-    console.log(game);
     game.playerList.push(playerId)
     const updatedGame = await game.save()
     res.send(updatedGame)

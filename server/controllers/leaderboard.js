@@ -15,7 +15,7 @@ const createLeaderboard = async (req, res) => {
   })
 
   quiz.questionList.forEach((question) => {
-    leaderboard.questionLeaderBoard.push({
+    leaderboard.questionLeaderboard.push({
       questionIndex: question.questionIndex,
       questionResultList: [],
     })
@@ -68,7 +68,7 @@ const updateQuestionLeaderboard = async (req, res) => {
 
   try {
     leaderboard = await Leaderboard.findById(leaderboardId)
-    leaderboard.questionLeaderBoard[questionIndex - 1].questionResultList.push({
+    leaderboard.questionLeaderboard[questionIndex - 1].questionResultList.push({
       playerId,
       playerPoints,
     })

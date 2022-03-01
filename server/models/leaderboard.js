@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
 const leaderBoardSchema = new mongoose.Schema({
   gameId: {
@@ -11,7 +11,7 @@ const leaderBoardSchema = new mongoose.Schema({
       ref: "PlayerResult",
     },
   ],
-  questionLeaderBoard: [
+  questionLeaderboard: [
     {
       questionIndex: { type: Number },
       questionResultList: [
@@ -20,20 +20,25 @@ const leaderBoardSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
           },
-          playerPoints: [{ type: Number }],
+          playerPoints: { type: Number },
         },
       ],
     },
   ],
   currentLeaderboard: [
     {
-      playerId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-      playerCurrentScore: [{ type: Number }],
+      questionIndex: { type: Number },
+      leaderboardList: [
+        {
+          playerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+          },
+          playerCurrentScore: { type: Number },
+        },
+      ],
     },
   ],
-});
+})
 
-module.exports = mongoose.model("Leaderboard", leaderBoardSchema);
+module.exports = mongoose.model("Leaderboard", leaderBoardSchema)

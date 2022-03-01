@@ -17,8 +17,8 @@ import { createSocket } from "./actions/socket"
 
 function App() {
   const user = JSON.parse(localStorage.getItem("profile"))
-  console.log(user);
   const dispatch = useDispatch()
+
   useEffect(() => {
     const socket = io("http://localhost:3001")
     dispatch(createSocket(socket))
