@@ -15,16 +15,12 @@ function PlayerScreen() {
   const socket = useSelector((state) => state.socket.socket)
   const dispatch = useDispatch()
   const { playerResult } = useSelector((state) => state.playerResults)
-  const [result, setResult] = useState()
-  // useEffect(() => {
-  //   console.log("update player result");
-  //   dispatch(getPlayerResult(playerResult?._id))
-  //   console.log(playerResult);
-  // }, [dispatch, playerResult?._id])
+  const [result, setResult] = useState(playerResult?.answers)
 
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false)
-  const [isGameStarted, setIsGameStarted] = useState(true)
-  const [isCountdownStarted, setIsCountdownStarted] = useState(true)
+  const [isPreviewScreen, setIsPreviewScreen] = useState(true)
+  const [isQuestionScreen, setIsQuestionScreen] = useState(false)
+  const [isResultScreen, setIsResultScreen] = useState(false)
   const [timer, setTimer] = useState(0)
   const [answerTime, setAnswerTime] = useState(0)
   const [questionData, setQuestionData] = useState()
@@ -42,6 +38,8 @@ function PlayerScreen() {
 
   useEffect(() => {
     socket.on("host-start-preview", () => {
+      setIsPreviewScreen(true)
+      setIsResultScreen(false)
       startPreviewCountdown(5)
     })
     socket.on("host-start-question-timer", (time, question) => {
@@ -61,13 +59,8 @@ function PlayerScreen() {
       setTimer(time)
       if (time === 0) {
         clearInterval(interval)
-        // let question = quiz.questionList[currentQuestionIndex]
-        // socket.emit("send-question-to-socket", question)
-        setIsCountdownStarted((prevstate) => !prevstate)
-        // displayQuestion(currentQuestionIndex)
-        // socket.emit("start-question-timer", () => {
-        //   startQuestionCountdown(quiz.questionList[currentQuestionIndex].answerTime)
-        // })
+        setIsPreviewScreen(false)
+        setIsQuestionScreen(true)
       }
       time--
     }, 1000)
@@ -81,20 +74,14 @@ function PlayerScreen() {
       setAnswerTime(answerSeconds)
       if (time === 0) {
         clearInterval(interval)
-        // let question = quiz.questionList[currentQuestionIndex]
-        // socket.emit("send-question-to-socket", question)
-        // displayQuestion(currentQuestionIndex)
-        setIsCountdownStarted((prevstate) => !prevstate)
+        setIsQuestionScreen(false)
         setIsQuestionAnswered(false)
+        setIsResultScreen(true)
         setAnswer({
           questionIndex: 0,
           answers: [],
           time: 0,
         })
-
-        // socket.emit("question-preview", () => {
-        //   startPreviewCountdown(5, index)
-        // })
       }
       time--
       answerSeconds++
@@ -105,8 +92,20 @@ function PlayerScreen() {
     const updatedPlayerResult = await dispatch(
       addAnswer(answer, playerResult._id)
     )
-    setResult(updatedPlayerResult)
-    console.log(updatedPlayerResult)
+    console.log(
+      updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1]
+    )
+    setResult(
+      updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1]
+    )
+    // let data = {
+    //   questionIndex: answer.questionIndex,
+    //   playerId: updatedPlayerResult.playerId,
+    //   playerPoints: updatedPlayerResult.answers[answer.questionIndex-1].points,
+    // }
+    // let score = updatedPlayerResult.score
+    // socket.emit("send-answer-to-host", data, score)
+    dispatch(getPlayerResult(playerResult._id))
   }
 
   const checkAnswer = (name) => {
@@ -138,6 +137,7 @@ function PlayerScreen() {
       answer?.answers.length > 0 &&
       answer?.answers.length === correctAnswerCount
     ) {
+      setIsQuestionScreen(false)
       setIsQuestionAnswered(true)
       sendAnswer()
       socket.emit("send-answer-to-host", answer)
@@ -148,12 +148,12 @@ function PlayerScreen() {
 
   return (
     <div className={styles.page}>
-      {isGameStarted && isCountdownStarted && (
+      {isPreviewScreen && (
         <div className={styles["question-preview"]}>
           <h1>{timer}</h1>
         </div>
       )}
-      {isGameStarted && !isCountdownStarted && !isQuestionAnswered && (
+      {isQuestionScreen && (
         <div className={styles["question-preview"]}>
           <div className={styles["answers-container"]}>
             <Answer
@@ -187,10 +187,20 @@ function PlayerScreen() {
           </div>
         </div>
       )}
-      {isGameStarted && !isCountdownStarted && isQuestionAnswered && (
+      {isQuestionAnswered && (
         <div className={styles["question-preview"]}>
           <h1>Wait for a result</h1>
           <CircularProgress />
+        </div>
+      )}
+      {isResultScreen && (
+        <div
+          className={styles["question-preview"]}
+          style={{ backgroundColor: result.points > 0 ? "green" : "red" }}
+        >
+          <h1>Result</h1>
+          <h3>{result.points > 0 ? "Correct" : "Wrong"}</h3>
+          <h3>Points: {result.points}</h3>
         </div>
       )}
     </div>
