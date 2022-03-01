@@ -11,7 +11,7 @@ const reducer = (state = { leaderboards: [], leaderboard: null }, action) => {
     case CREATE_LEADERBOARD:
       return {
         ...state,
-        leaderboards: [...state.playerResults, action.payload],
+        leaderboards: [...state.leaderboards, action.payload],
         leaderboard: action.payload,
       }
     case FETCH_LEADERBOARD:
