@@ -23,3 +23,11 @@
 .question-preview h1 {
   font-size: 90px;
 }
+
+.answers-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 95%;
+  justify-content: center;
+  align-items: center;
+}

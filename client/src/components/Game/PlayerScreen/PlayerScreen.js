@@ -1,42 +1,39 @@
 import React from "react"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { addAnswer } from "../../../actions/playerResult"
+import { addAnswer, getPlayerResult } from "../../../actions/playerResult"
 import { useEffect } from "react"
 import styles from "./playerScreen.module.css"
+import Answer from "../Answer/Answer"
+import diamond from "../../../assets/diamond.svg"
+import triangle from "../../../assets/triangle.svg"
+import circle from "../../../assets/circle.svg"
+import square from "../../../assets/square.svg"
+import { CircularProgress } from "@material-ui/core"
 
 function PlayerScreen() {
   const socket = useSelector((state) => state.socket.socket)
-  // getPlayerResult i zapisać go w zmiennej
-  // później przy kazdym wysyłaniu odpowiedzi robić addAnswer
+  const dispatch = useDispatch()
   const { playerResult } = useSelector((state) => state.playerResults)
-  // const [gameStarted, setGameStarted] = useState(false)
+  const [result, setResult] = useState()
+  // useEffect(() => {
+  //   console.log("update player result");
+  //   dispatch(getPlayerResult(playerResult?._id))
+  //   console.log(playerResult);
+  // }, [dispatch, playerResult?._id])
+
+  const [isQuestionAnswered, setIsQuestionAnswered] = useState(false)
   const [isGameStarted, setIsGameStarted] = useState(true)
-  const [isQuestionDisplayed, setIsQuestionDisplayed] = useState(false)
   const [isCountdownStarted, setIsCountdownStarted] = useState(true)
   const [timer, setTimer] = useState(0)
-  const [playerResultData, setPlayerResultData] = useState({
-    playerId: "",
-    gameId: "",
-    quizId: "",
-    score: 0,
-    answers: [
-      {
-        questionIndex: 0,
-        answered: false,
-        answers: [],
-        correctAnswers: [],
-        time: 0,
-        points: 0,
-      },
-    ],
-  })
+  const [answerTime, setAnswerTime] = useState(0)
+  const [questionData, setQuestionData] = useState()
+  const [correctAnswerCount, setCorrectAnswerCount] = useState(1)
+
   const [answer, setAnswer] = useState({
     questionIndex: 0,
-    answered: false,
     answers: [],
     time: 0,
-    points: 0,
   })
 
   useEffect(() => {
@@ -47,10 +44,16 @@ function PlayerScreen() {
     socket.on("host-start-preview", () => {
       startPreviewCountdown(5)
     })
-    socket.on("host-start-question-timer", (time) => {
+    socket.on("host-start-question-timer", (time, question) => {
+      setQuestionData(question.answerList)
       startQuestionCountdown(time)
+      setAnswer((prevstate) => ({
+        ...prevstate,
+        questionIndex: question.questionIndex,
+      }))
+      setCorrectAnswerCount(question.correctAnswersCount)
     })
-  }, [])
+  }, [socket])
 
   const startPreviewCountdown = (seconds) => {
     let time = seconds
@@ -72,28 +75,76 @@ function PlayerScreen() {
 
   const startQuestionCountdown = (seconds) => {
     let time = seconds
+    let answerSeconds = 0
     let interval = setInterval(() => {
       setTimer(time)
+      setAnswerTime(answerSeconds)
       if (time === 0) {
         clearInterval(interval)
         // let question = quiz.questionList[currentQuestionIndex]
         // socket.emit("send-question-to-socket", question)
         // displayQuestion(currentQuestionIndex)
         setIsCountdownStarted((prevstate) => !prevstate)
+        setIsQuestionAnswered(false)
+        setAnswer({
+          questionIndex: 0,
+          answers: [],
+          time: 0,
+        })
+
         // socket.emit("question-preview", () => {
         //   startPreviewCountdown(5, index)
         // })
       }
       time--
+      answerSeconds++
     }, 1000)
   }
-  //moze jeszcze answerCount zeby czas zatrzymac dopiero jak sie odpowie na wszystkie mozliwe
-  //i jeszcze info ze kilka poprawnych odpowiedzi
 
-  // po kliknięciu w odp disptach(addAnswer)
-  // po odliczeniu czasu tez dispatch ale z answer = false
-  // wtedy aktualizować state answer i wysłać go w sockecie
-  // zaktualizować tez playerResultData
+  const sendAnswer = async () => {
+    const updatedPlayerResult = await dispatch(
+      addAnswer(answer, playerResult._id)
+    )
+    setResult(updatedPlayerResult)
+    console.log(updatedPlayerResult)
+  }
+
+  const checkAnswer = (name) => {
+    let answerIndex = answer.answers.findIndex((obj) => obj === name)
+    if (answer.answers.includes(name)) {
+      //remove answer
+      setAnswer((prevstate) => ({
+        ...prevstate,
+        answers: [
+          ...prevstate.answers.slice(0, answerIndex),
+          ...prevstate.answers.slice(answerIndex + 1, prevstate.answers.length),
+        ],
+      }))
+    } else {
+      //add answer
+      setAnswer((prevstate) => ({
+        ...prevstate,
+        answers: [...prevstate.answers, name],
+      }))
+    }
+    setAnswer((prevstate) => ({
+      ...prevstate,
+      time: answerTime,
+    }))
+  }
+
+  useEffect(() => {
+    if (
+      answer?.answers.length > 0 &&
+      answer?.answers.length === correctAnswerCount
+    ) {
+      setIsQuestionAnswered(true)
+      sendAnswer()
+      socket.emit("send-answer-to-host", answer)
+    } else {
+      setIsQuestionAnswered(false)
+    }
+  }, [answer?.answers.length, correctAnswerCount, answer, socket])
 
   return (
     <div className={styles.page}>
@@ -102,10 +153,44 @@ function PlayerScreen() {
           <h1>{timer}</h1>
         </div>
       )}
-      {isGameStarted && !isCountdownStarted && (
+      {isGameStarted && !isCountdownStarted && !isQuestionAnswered && (
         <div className={styles["question-preview"]}>
-          <h3>Tu będzie pytanie</h3>
-          <h1>{timer}</h1>
+          <div className={styles["answers-container"]}>
+            <Answer
+              icon={triangle}
+              showText={false}
+              isAnswerClicked={answer.answers.includes("a")}
+              onClick={() => checkAnswer("a")}
+            />
+            <Answer
+              icon={diamond}
+              showText={false}
+              isAnswerClicked={answer.answers.includes("b")}
+              onClick={() => checkAnswer("b")}
+            />
+            {questionData?.length > 2 && (
+              <>
+                <Answer
+                  icon={circle}
+                  showText={false}
+                  isAnswerClicked={answer.answers.includes("c")}
+                  onClick={() => checkAnswer("c")}
+                />
+                <Answer
+                  icon={square}
+                  showText={false}
+                  isAnswerClicked={answer.answers.includes("d")}
+                  onClick={() => checkAnswer("d")}
+                />
+              </>
+            )}
+          </div>
+        </div>
+      )}
+      {isGameStarted && !isCountdownStarted && isQuestionAnswered && (
+        <div className={styles["question-preview"]}>
+          <h1>Wait for a result</h1>
+          <CircularProgress />
         </div>
       )}
     </div>
