@@ -7,6 +7,7 @@ import moment from "moment"
 import DeleteIcon from "@material-ui/icons/Delete"
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz"
 import { useHistory } from "react-router-dom"
+import { createLeaderboard } from "../../../actions/leaderboard"
 
 function MyQuiz({ quiz }) {
   const dispatch = useDispatch()
@@ -24,7 +25,10 @@ function MyQuiz({ quiz }) {
       pin: String(Math.floor(Math.random() * 9000) + 1000),
     }
     const newGame = await dispatch(createGame(gameData, history))
-    socket.emit("init-game", newGame) 
+    let leaderboardData = { gameId: newGame._id, playerResultList: [] }
+    
+    const newLeaderboard = await dispatch(createLeaderboard(leaderboardData))
+    socket.emit("init-game", newGame, newLeaderboard)
   }
 
   return (
