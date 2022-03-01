@@ -43,6 +43,10 @@ body {
   cursor: pointer;
 }
 
+.logo-img{
+  width: 50px;
+}
+
 .nav__list-item {
   list-style: none;
   font-weight: bold;

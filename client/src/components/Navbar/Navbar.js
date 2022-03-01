@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux"
 import decode from "jwt-decode"
 import * as actionType from "../../constants/actionTypes"
 import globe from "../../assets/globe.svg"
+import logo from "../../assets/logo.png"
 import { changeLanguage } from "../../actions/language"
 
 function Navbar() {
@@ -40,7 +41,7 @@ function Navbar() {
           <ul className={styles.nav__list}>
             <li className={styles["nav__list-logo"]}>
               <Link to="/" className={styles["logo-link"]}>
-                <img src="" alt="logo" className={styles["logo-img"]} />
+                <img src={logo} alt="logo" className={styles["logo-img"]} />
               </Link>
             </li>
             <li className={styles["nav__list-item"]}>
