@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const PlayerResult = require("../models/playerResult")
 const Quiz = require("../models/quiz")
+const Game = require("../models/game")
 
 const createPlayerResult = async (req, res) => {
   const { playerId, gameId, score, answers } = req.body
@@ -8,7 +9,7 @@ const createPlayerResult = async (req, res) => {
     playerId,
     gameId,
     score,
-    answers
+    answers,
   })
 
   try {
@@ -83,9 +84,12 @@ const updatePlayerResult = async (req, res) => {
 
 const addAnswer = async (req, res) => {
   const { playerResultId } = req.params
-  const { questionIndex, answered, answers, time } = req.body
+  const { questionIndex, 
+    // answered, 
+    answers, time } = req.body.newAnswer
 
   let playerResult
+  let game
   let quiz
   let correctAnswers
   let pointType
@@ -93,33 +97,35 @@ const addAnswer = async (req, res) => {
   let points = 0
   try {
     playerResult = await PlayerResult.findById(playerResultId)
-    quiz = await Quiz.findById(playerResult.quizId)
-    correctAnswers = quiz.questionList[questionIndex].correctAnswersList
-    pointType = quiz.questionList[questionIndex].pointType
-    answerTime = quiz.questionList[questionIndex].answerTime
+    game = await Game.findById(playerResult.gameId)
+    // console.log(answered)
+    quiz = await Quiz.findById(game.quizId)
+    console.log(quiz.questionList[questionIndex-1].answerList)
+    correctAnswers = quiz.questionList[questionIndex-1].answerList
+      .filter((answer) => answer.isCorrect === true)
+      .map((answer) => answer.name)
+    pointType = quiz.questionList[questionIndex-1].pointType
+    answerTime = quiz.questionList[questionIndex-1].answerTime
     //posortować answers zeby indeksy szły w tej samej kolejności
-    if (answered === true) {
+    let sortedAnswers = answers.sort()
+    console.log(sortedAnswers);
+    // if (answered === true) {
+    if (answers.length > 0) {
       let a = 0
       for (let i = 0; i < correctAnswers.length; i++) {
-        if (
-          correctAnswers[i].name === answers[i].name &&
-          correctAnswers[i].body === answers[i].body
-        ) {
+        if (correctAnswers[i] === sortedAnswers[i]) {
           a++
         }
       }
       if (a === correctAnswers.length) {
         points = calculatePoints(quiz, time, pointType, answerTime)
       }
-      // if (answered && answerIndex === correctAnswerIndex) {
-      //   points = calculatePoints(quiz, time);
-      // }
     }
 
     playerResult.score += points
     playerResult.answers.push({
       questionIndex,
-      answered,
+      // answered,
       answers,
       time,
       correctAnswers,
@@ -129,6 +135,17 @@ const addAnswer = async (req, res) => {
     res.send(updatedPlayerResult)
   } catch (error) {
     res.status(400).json({ message: error.message })
+  }
+}
+
+const calculatePoints = (quiz, time, pointType, answerTime) => {
+  let pointsPerQuestion = quiz.pointsPerQuestion
+  if (pointType === "Double") {
+    return pointsPerQuestion * 2
+  } else if (pointType === "BasedOnTime") {
+    return (pointsPerQuestion / answerTime) * (answerTime - time)
+  } else {
+    return pointsPerQuestion
   }
 }
 
@@ -231,19 +248,6 @@ const updateAnswer = async (req, res) => {
     res.send(updatedPlayerResult)
   } catch (error) {
     res.status(400).json({ message: error.message })
-  }
-}
-
-const calculatePoints = (quiz, time, pointType, answerTime) => {
-  //let pointType = quiz.pointType;
-  let pointsPerQuestion = quiz.pointsPerQuestion
-  //let answerTime = quiz.answerTime;
-  if (pointType === "Double") {
-    return pointsPerQuestion * 2
-  } else if (pointType === "BasedOnTime") {
-    return (pointsPerQuestion / answerTime) * (answerTime - time)
-  } else {
-    return pointsPerQuestion
   }
 }
 
