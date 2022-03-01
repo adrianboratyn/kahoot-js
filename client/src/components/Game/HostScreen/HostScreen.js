@@ -4,20 +4,24 @@ import WaitingRoom from "../WaitingRoom/WaitingRoom"
 import { useDispatch, useSelector } from "react-redux"
 import { getGame } from "../../../actions/game"
 import { getQuiz } from "../../../actions/quiz"
+import {
+  getLeaderboard,
+  updateQuestionLeaderboard,
+  updateCurrentLeaderboard,
+} from "../../../actions/leaderboard"
 import styles from "./hostScreen.module.css"
 import Question from "../Question/Question"
 
 function HostScreen() {
   const socket = useSelector((state) => state.socket.socket)
   const [isGameStarted, setIsGameStarted] = useState(false)
-  // const [isQuestionDisplayed, setIsQuestionDisplayed] = useState(false)
-  const [isCountdownStarted, setIsCountdownStarted] = useState(false)
+  const [isPreviewScreen, setIsPreviewScreen] = useState(false)
+  const [isQuestionScreen, setIsQuestionScreen] = useState(false)
+  const [isQuestionResultScreen, setIsQuestionResultScreen] = useState(false)
+  const [isLeaderboardScreen, setIsLeaderboardScreen] = useState(false)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [timer, setTimer] = useState(0)
-  const [gameData, setGameData] = useState({
-    isLive: "",
-    playerResultList: [],
-  })
+  const [playerList, setPlayerList] = useState([])
   const [questionData, setQuestionData] = useState({
     questionType: "Quiz",
     pointType: "Standard",
@@ -36,6 +40,13 @@ function HostScreen() {
   const { id } = useParams()
   const { game } = useSelector((state) => state.games)
   const { quiz } = useSelector((state) => state.quiz)
+  const { leaderboard } = useSelector((state) => state.leaderboards)
+  const [questionResult, setQuestionResult] = useState(
+    leaderboard?.questionLeaderboard[0]
+  )
+  const [currentLeaderboard, setCurrentLeaderboard] = useState(
+    leaderboard?.currentLeaderboard[0]
+  )
 
   useEffect(() => {
     dispatch(getGame(id))
@@ -51,30 +62,50 @@ function HostScreen() {
     setTimer(5)
   }, [])
 
+  useEffect(() => {
+    socket.on("get-answer-from-player", (data, id, score, player) => {
+      updateLeaderboard(data, id, score)
+      let playerData = { id: data.playerId, userName: player.userName }
+      setPlayerList(prevstate => [...prevstate, playerData])
+    })
+  }, [socket])
+
+  const updateLeaderboard = async (data, id, score) => {
+    let question = await dispatch(updateQuestionLeaderboard(data, id))
+    setQuestionResult(question.questionLeaderboard[data.questionIndex - 1])
+    let leaderboardData = {
+      questionIndex: data.questionIndex,
+      playerId: data.playerId,
+      playerCurrentScore: score,
+    }
+    let leaderboard = await dispatch(
+      updateCurrentLeaderboard(leaderboardData, id)
+    )
+    setCurrentLeaderboard(
+      leaderboard.currentLeaderboard[data.questionIndex - 1]
+    )
+  }
+
   const startGame = () => {
     socket.emit("start-game", quiz)
     socket.emit("question-preview", () => {
       startPreviewCountdown(5, currentQuestionIndex)
     })
     setIsGameStarted((prevstate) => !prevstate)
-    setIsCountdownStarted((prevstate) => !prevstate)
+    setIsPreviewScreen(true)
   }
 
   const startPreviewCountdown = (seconds, index) => {
+    setIsLeaderboardScreen(false)
+    setIsPreviewScreen(true)
     let time = seconds
     let interval = setInterval(() => {
       setTimer(time)
       if (time === 0) {
         clearInterval(interval)
-        let question = quiz.questionList[index]
-        socket.emit("send-question-to-socket", question)
         displayQuestion(index)
-        setIsCountdownStarted((prevstate) => !prevstate)
-        // socket.emit("start-question-timer", () => {
-        //   startQuestionCountdown(
-        //     quiz.questionList[index].answerTime
-        //   )
-        // })
+        setIsPreviewScreen(false)
+        setIsQuestionScreen(true)
       }
       time--
     }, 1000)
@@ -86,34 +117,50 @@ function HostScreen() {
       setTimer(time)
       if (time === 0) {
         clearInterval(interval)
-        // let question = quiz.questionList[currentQuestionIndex]
-        // socket.emit("send-question-to-socket", question)
-        // displayQuestion(currentQuestionIndex)
-        setIsCountdownStarted((prevstate) => !prevstate)
-        socket.emit("question-preview", () => {
-          startPreviewCountdown(5, index)
-        })
+        displayQuestionResult(index)
       }
       time--
     }, 1000)
   }
-  // const displayQuestionResult = () => {}
+  const displayQuestionResult = (index) => {
+    setIsQuestionScreen(false)
+    setIsQuestionResultScreen(true)
+    setTimeout(() => {
+      displayCurrentLeaderBoard(index)
+    }, 5000)
+  }
 
-  // const displayCurrentLeaderBoard = () => {}
+  const displayCurrentLeaderBoard = (index) => {
+    setIsQuestionResultScreen(false)
+    setIsLeaderboardScreen(true)
+    setTimeout(() => {
+      socket.emit("question-preview", () => {
+        startPreviewCountdown(5, index)
+        setPlayerList([])
+      })
+    }, 5000)
+  }
 
   const displayQuestion = (index) => {
-    setQuestionData(quiz.questionList[index])
-    setCurrentQuestionIndex((prevstate) => prevstate + 1)
     if (index === quiz.questionList.length) {
-      socket.emit("show-leaderboard")
+      displayCurrentLeaderBoard(index)
     } else {
+      setQuestionData(quiz.questionList[index])
+      setCurrentQuestionIndex((prevstate) => prevstate + 1)
       let time = quiz.questionList[index].answerTime
-      socket.emit("start-question-timer", time, () => {
+      let question = {
+        answerList: quiz.questionList[index].answerList,
+        questionIndex: quiz.questionList[index].questionIndex,
+        correctAnswersCount: quiz.questionList[index].answerList.filter(
+          (answer) => answer.isCorrect === true
+        ).length,
+      }
+      socket.emit("start-question-timer", time, question, () => {
         startQuestionCountdown(time, index + 1)
       })
     }
   }
-
+console.log(playerList);
   return (
     <div className={styles.page}>
       {!isGameStarted && (
@@ -123,18 +170,49 @@ function HostScreen() {
         </div>
       )}
 
-      {isGameStarted && isCountdownStarted && (
+      {isPreviewScreen && (
         <div className={styles["question-preview"]}>
           <h1>{timer}</h1>
         </div>
       )}
-      {isGameStarted && !isCountdownStarted && (
+      {isQuestionScreen && (
         <div className={styles["question-preview"]}>
           <Question
             key={questionData.questionIndex}
             question={questionData}
             timer={timer}
+            host={true}
           />
+        </div>
+      )}
+      {isQuestionResultScreen && (
+        <div className={styles["question-preview"]}>
+          <h2>Question result</h2>
+          {questionResult.questionResultList.map((player) => (
+            <div className={styles["leaderboard"]}>
+              {playerList
+                .filter((x) => x.id === player.playerId)
+                .map((x) => (
+                  <h3>{x.userName}</h3>
+                ))}
+              <h3>{player.playerPoints}</h3>
+            </div>
+          ))}
+        </div>
+      )}
+      {isLeaderboardScreen && (
+        <div className={styles["question-preview"]}>
+          <h2>Leaderboard</h2>
+          {currentLeaderboard.leaderboardList.map((player) => (
+            <div className={styles["leaderboard"]}>
+              {playerList
+                .filter((x) => x.id === player.playerId)
+                .map((x) => (
+                  <h3>{x.userName}</h3>
+                ))}
+              <h3>{player.playerCurrentScore}</h3>
+            </div>
+          ))}
         </div>
       )}
     </div>

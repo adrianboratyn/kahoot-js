@@ -21,6 +21,12 @@
   padding: 10px;
 }
 
+.leaderboard{
+  display: flex;
+  justify-content: space-between;
+  font-size: 60px; 
+}
+
 .lobby button {
   width: 40%;
   margin-top: 10px;

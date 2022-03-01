@@ -15,10 +15,10 @@ function PlayerScreen() {
   const socket = useSelector((state) => state.socket.socket)
   const dispatch = useDispatch()
   const { playerResult } = useSelector((state) => state.playerResults)
-  const [result, setResult] = useState(playerResult?.answers)
+  const [result, setResult] = useState(playerResult?.answers[0])
 
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false)
-  const [isPreviewScreen, setIsPreviewScreen] = useState(true)
+  const [isPreviewScreen, setIsPreviewScreen] = useState(false)
   const [isQuestionScreen, setIsQuestionScreen] = useState(false)
   const [isResultScreen, setIsResultScreen] = useState(false)
   const [timer, setTimer] = useState(0)
@@ -48,6 +48,8 @@ function PlayerScreen() {
       setAnswer((prevstate) => ({
         ...prevstate,
         questionIndex: question.questionIndex,
+        answers: [],
+        time: 0,
       }))
       setCorrectAnswerCount(question.correctAnswersCount)
     })
@@ -77,11 +79,6 @@ function PlayerScreen() {
         setIsQuestionScreen(false)
         setIsQuestionAnswered(false)
         setIsResultScreen(true)
-        setAnswer({
-          questionIndex: 0,
-          answers: [],
-          time: 0,
-        })
       }
       time--
       answerSeconds++
@@ -98,13 +95,14 @@ function PlayerScreen() {
     setResult(
       updatedPlayerResult.answers[updatedPlayerResult.answers.length - 1]
     )
-    // let data = {
-    //   questionIndex: answer.questionIndex,
-    //   playerId: updatedPlayerResult.playerId,
-    //   playerPoints: updatedPlayerResult.answers[answer.questionIndex-1].points,
-    // }
-    // let score = updatedPlayerResult.score
-    // socket.emit("send-answer-to-host", data, score)
+    let data = {
+      questionIndex: answer.questionIndex,
+      playerId: updatedPlayerResult.playerId,
+      playerPoints:
+        updatedPlayerResult.answers[answer.questionIndex - 1].points,
+    }
+    let score = updatedPlayerResult.score
+    socket.emit("send-answer-to-host", data, score)
     dispatch(getPlayerResult(playerResult._id))
   }
 
@@ -140,7 +138,6 @@ function PlayerScreen() {
       setIsQuestionScreen(false)
       setIsQuestionAnswered(true)
       sendAnswer()
-      socket.emit("send-answer-to-host", answer)
     } else {
       setIsQuestionAnswered(false)
     }
