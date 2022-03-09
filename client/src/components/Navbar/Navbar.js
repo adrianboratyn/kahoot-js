@@ -69,16 +69,21 @@ function Navbar() {
             <li className={styles["nav__list-item"]}>
               {isLanguageEnglish ? "Contact" : "Kontakt"}
             </li>
-            <li className={styles["nav__list-item"]}>
-              {isLanguageEnglish ? "Play" : "Graj"}
-            </li>
+
             {user ? (
               <>
-                <li className={styles["nav__list-item"]}>
-                  <Link to="/myquizes">
-                    {isLanguageEnglish ? "My Quizes" : "Moje Quizy"}
+                  <li className={styles["nav__list-item"]}>
+                  <Link to="/games/joingame">
+                    {isLanguageEnglish ? "Play" : "Graj"}
                   </Link>
                 </li>
+                {user.result.userType === "Teacher" && (
+                  <li className={styles["nav__list-item"]}>
+                    <Link to="/myquizes">
+                      {isLanguageEnglish ? "My Quizes" : "Moje Quizy"}
+                    </Link>
+                  </li>
+                )}
                 <li className={styles["nav__list-item"]}>
                   {user.result.firstName}
                 </li>
