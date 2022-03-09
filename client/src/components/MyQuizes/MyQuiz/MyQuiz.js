@@ -53,7 +53,9 @@ function MyQuiz({ quiz }) {
             {quiz.tags.map((tag) => `#${tag} `)}
           </h4>
           <div className={styles["card-buttons"]}>
-            <button onClick={addGame}>Start a game</button>
+            <button onClick={addGame}>
+              {isLanguageEnglish ? "Start a game" : "Rozpocznij grę"}
+            </button>
             <button onClick={openQuizPage}>
               <MoreHorizIcon fontSize="medium" />
             </button>

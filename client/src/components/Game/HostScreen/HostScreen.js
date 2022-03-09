@@ -41,6 +41,7 @@ function HostScreen() {
   const { game } = useSelector((state) => state.games)
   const { quiz } = useSelector((state) => state.quiz)
   const { leaderboard } = useSelector((state) => state.leaderboards)
+  const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
   const [questionResult, setQuestionResult] = useState(
     leaderboard?.questionLeaderboard[0]
   )
@@ -66,7 +67,7 @@ function HostScreen() {
     socket.on("get-answer-from-player", (data, id, score, player) => {
       updateLeaderboard(data, id, score)
       let playerData = { id: data.playerId, userName: player.userName }
-      setPlayerList(prevstate => [...prevstate, playerData])
+      setPlayerList((prevstate) => [...prevstate, playerData])
     })
   }, [socket])
 
@@ -160,13 +161,15 @@ function HostScreen() {
       })
     }
   }
-console.log(playerList);
+  console.log(playerList)
   return (
     <div className={styles.page}>
       {!isGameStarted && (
         <div className={styles.lobby}>
           <WaitingRoom pin={game?.pin} socket={socket} />
-          <button onClick={startGame}>Start a game</button>
+          <button onClick={startGame}>
+            {isLanguageEnglish ? "Start a game" : "Rozpocznij grę"}
+          </button>
         </div>
       )}
 
@@ -187,32 +190,44 @@ console.log(playerList);
       )}
       {isQuestionResultScreen && (
         <div className={styles["question-preview"]}>
-          <h2>Question result</h2>
-          {questionResult.questionResultList.map((player) => (
-            <div className={styles["leaderboard"]}>
-              {playerList
-                .filter((x) => x.id === player.playerId)
-                .map((x) => (
-                  <h3>{x.userName}</h3>
-                ))}
-              <h3>{player.playerPoints}</h3>
-            </div>
-          ))}
+          <div className={styles["leaderboard"]}>
+            <h1 className={styles["leaderboard-title"]}>
+              {isLanguageEnglish ? "Question result" : "Wynik pytania"}
+            </h1>
+            <ol>
+              {questionResult.questionResultList.map((player) => (
+                <li>
+                  {playerList
+                    .filter((x) => x.id === player.playerId)
+                    .map((x) => (
+                      <mark>{x.userName}</mark>
+                    ))}
+                  <small>{player.playerPoints}</small>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       )}
       {isLeaderboardScreen && (
         <div className={styles["question-preview"]}>
-          <h2>Leaderboard</h2>
-          {currentLeaderboard.leaderboardList.map((player) => (
-            <div className={styles["leaderboard"]}>
-              {playerList
-                .filter((x) => x.id === player.playerId)
-                .map((x) => (
-                  <h3>{x.userName}</h3>
-                ))}
-              <h3>{player.playerCurrentScore}</h3>
-            </div>
-          ))}
+          <div className={styles["leaderboard"]}>
+            <h1 className={styles["leaderboard-title"]}>
+              {isLanguageEnglish ? "Leaderboard" : "Tablica wyników"}
+            </h1>
+            <ol>
+              {currentLeaderboard.leaderboardList.map((player) => (
+                <li>
+                  {playerList
+                    .filter((x) => x.id === player.playerId)
+                    .map((x) => (
+                      <mark>{x.userName}</mark>
+                    ))}
+                  <small>{player.playerCurrentScore}</small>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       )}
     </div>

@@ -13,6 +13,7 @@ import { CircularProgress } from "@material-ui/core"
 
 function PlayerScreen() {
   const socket = useSelector((state) => state.socket.socket)
+  const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
   const dispatch = useDispatch()
   const { playerResult } = useSelector((state) => state.playerResults)
   const [result, setResult] = useState(playerResult?.answers[0])
@@ -186,7 +187,7 @@ function PlayerScreen() {
       )}
       {isQuestionAnswered && (
         <div className={styles["question-preview"]}>
-          <h1>Wait for a result</h1>
+          <h1>{isLanguageEnglish ? "Wait for a result" : "Czekaj na wynik"}</h1>
           <CircularProgress />
         </div>
       )}
@@ -195,9 +196,19 @@ function PlayerScreen() {
           className={styles["question-preview"]}
           style={{ backgroundColor: result.points > 0 ? "green" : "red" }}
         >
-          <h1>Result</h1>
-          <h3>{result.points > 0 ? "Correct" : "Wrong"}</h3>
-          <h3>Points: {result.points}</h3>
+          <h1>{isLanguageEnglish ? "Result" : "Wynik"}</h1>
+          <h3>
+            {result.points > 0
+              ? isLanguageEnglish
+                ? "Correct"
+                : "Dobrze"
+              : isLanguageEnglish
+              ? "Wrong"
+              : "Źle"}
+          </h3>
+          <h3>
+            {isLanguageEnglish ? "Points: " : "Punkty: "} {result.points}
+          </h3>
         </div>
       )}
     </div>

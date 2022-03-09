@@ -73,25 +73,25 @@ function Auth() {
               <>
                 <Input
                   name="firstName"
-                  label="First Name"
+                  label={isLanguageEnglish ? "First Name" : "Imię"}
                   handleChange={handleChange}
                   autoFocus
                   half
                 />
                 <Input
                   name="lastName"
-                  label="Last Name"
+                  label={isLanguageEnglish ? "Last Name" : "Nazwisko"}
                   handleChange={handleChange}
                   half
                 />
                 <Input
                   name="userType"
-                  label="User Type"
+                  label={isLanguageEnglish ? "User type" : "Rodzaj konta"}
                   handleChange={handleChange}
                 />
                 <Input
                   name="mail"
-                  label="Email Address"
+                  label={isLanguageEnglish ? "Email address" : "Email"}
                   handleChange={handleChange}
                   type="email"
                 />
@@ -100,12 +100,12 @@ function Auth() {
 
             <Input
               name="userName"
-              label="User Name"
+              label={isLanguageEnglish ? "User Name" : "Nazwa użytkownika"}
               handleChange={handleChange}
             />
             <Input
               name="password"
-              label="Password"
+              label={isLanguageEnglish ? "Password" : "Hasło"}
               handleChange={handleChange}
               type={showPassword ? "text" : "password"}
               handleShowPassword={handleShowPassword}
@@ -113,7 +113,7 @@ function Auth() {
             {isSignup && (
               <Input
                 name="confirmPassword"
-                label="Repeat Password"
+                label={isLanguageEnglish ? "Repeat password" : "Powtórz hasło"}
                 handleChange={handleChange}
                 type="password"
               />

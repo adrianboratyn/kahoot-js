@@ -13,6 +13,7 @@ function JoinGame() {
   const pinRef = useRef("")
   const history = useHistory()
   const socket = useSelector((state) => state.socket.socket)
+  const isLanguageEnglish = useSelector((state) => state.language.isEnglish)
 
   useEffect(()=>{
     socket?.on("move-to-game-page", (gameId) => {
@@ -53,14 +54,26 @@ function JoinGame() {
     <div className={styles.page}>
       {!isPlayerAdded ? (
         <div className={styles.section}>
-          <h2>Join Game</h2>
-          <input type="text" ref={pinRef}  placeholder="Write your pin here"/>
-          <button onClick={joinGame}>Join a Game</button>
+          <h2>{isLanguageEnglish ? "Join game" : "Dołącz do gry"}</h2>
+          <input
+            type="text"
+            ref={pinRef}
+            placeholder={
+              isLanguageEnglish ? "Write here a pin" : "Wpisz tutaj pin"
+            }
+          />
+          <button onClick={joinGame}>
+            {isLanguageEnglish ? "Send" : "Wyślij"}
+          </button>
         </div>
       ) : (
         <div className={styles.section}>
-          <h2>You joined the game</h2>
-          <h4>Waiting on a host to start the game</h4>
+          <h2>
+            {isLanguageEnglish ? "You joined the game" : "Dołączyłeś do gry"}
+          </h2>
+          <h4>
+            {isLanguageEnglish ? "Waiting on a host to start the game" : "Zaczekaj na rozpoczęcie gry przez hosta"}
+          </h4>
           <CircularProgress />
         </div>
       )}
