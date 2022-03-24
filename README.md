@@ -1,4 +1,4 @@
-[![App Video](https://img.youtube.com/vi/--6w9cnCC1VI8/0.jpg)](https://www.youtube.com/watch?v=6w9cnCC1VI8)
+[![App Video](https://img.youtube.com/vi/6w9cnCC1VI8/0.jpg)](https://www.youtube.com/watch?v=6w9cnCC1VI8)
 
 # Kahoot-JS
 
