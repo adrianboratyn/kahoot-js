@@ -1,1 +1,1 @@
-# praca-dyplomowa-v1
+# kahoot-js
