@@ -566,11 +566,11 @@ function QuizCreator() {
               <option defaultValue disabled>
                 {isLanguageEnglish
                   ? "Select question type"
-                  : "Wybierz typ pytania"}
+                  : "選擇題目類型"}
               </option>
-              <option value="Quiz">Quiz</option>
+              <option value="Quiz">選擇題</option>
               <option value="True/False">
-                {isLanguageEnglish ? "True/False" : "對/錯"}
+                {isLanguageEnglish ? "True/False" : "是非題"}
               </option>
             </select>
           </div>

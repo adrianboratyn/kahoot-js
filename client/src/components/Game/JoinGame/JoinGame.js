@@ -59,7 +59,7 @@ function JoinGame() {
             type="text"
             ref={pinRef}
             placeholder={
-              isLanguageEnglish ? "Write here a pin" : "請輸入 pin"
+              isLanguageEnglish ? "Write here a pin" : "請輸入 PIN"
             }
           />
           <button onClick={joinGame}>
