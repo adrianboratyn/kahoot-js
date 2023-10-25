@@ -34,7 +34,7 @@ function JoinGame() {
       dispatch(addPlayer(gameId, playerId))
       setIsPlayerAdded(true)
     } else {
-      alert("Podałeś zły pin lub gra nie istnieje")
+      alert("You entered the wrong pin or the game does not exist.")
     }
   }
 
@@ -54,25 +54,25 @@ function JoinGame() {
     <div className={styles.page}>
       {!isPlayerAdded ? (
         <div className={styles.section}>
-          <h2>{isLanguageEnglish ? "Join game" : "Dołącz do gry"}</h2>
+          <h2>{isLanguageEnglish ? "Join game" : "參加遊戲"}</h2>
           <input
             type="text"
             ref={pinRef}
             placeholder={
-              isLanguageEnglish ? "Write here a pin" : "Wpisz tutaj pin"
+              isLanguageEnglish ? "Write here a pin" : "請輸入 pin"
             }
           />
           <button onClick={joinGame}>
-            {isLanguageEnglish ? "Send" : "Wyślij"}
+            {isLanguageEnglish ? "Send" : "傳送"}
           </button>
         </div>
       ) : (
         <div className={styles.section}>
           <h2>
-            {isLanguageEnglish ? "You joined the game" : "Dołączyłeś do gry"}
+            {isLanguageEnglish ? "You joined the game" : "你已參與本遊戲"}
           </h2>
           <h4>
-            {isLanguageEnglish ? "Waiting on a host to start the game" : "Zaczekaj na rozpoczęcie gry przez hosta"}
+            {isLanguageEnglish ? "Waiting on a host to start the game" : "等待房主開始遊戲"}
           </h4>
           <CircularProgress />
         </div>

@@ -66,7 +66,7 @@ function Quiz({ quiz }) {
           style={{ backgroundImage: "url('" + quiz.backgroundImage + "')" }}
         ></div>
         <h3 className={styles["quiz-question-number"]}>
-          {isLanguageEnglish ? "Questions:" : "Pytania:"}{" "}
+          {isLanguageEnglish ? "Questions:" : "問題:"}{" "}
           {quiz.numberOfQuestions}
         </h3>
       </div>

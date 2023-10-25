@@ -62,10 +62,10 @@ function Auth() {
           {isSignup
             ? isLanguageEnglish
               ? "Sign up"
-              : "Zarejestruj się"
+              : "註冊"
             : isLanguageEnglish
             ? "Sign in"
-            : "Zaloguj się"}
+            : "登入"}
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
@@ -73,25 +73,25 @@ function Auth() {
               <>
                 <Input
                   name="firstName"
-                  label={isLanguageEnglish ? "First Name" : "Imię"}
+                  label={isLanguageEnglish ? "First Name" : "名字"}
                   handleChange={handleChange}
                   autoFocus
                   half
                 />
                 <Input
                   name="lastName"
-                  label={isLanguageEnglish ? "Last Name" : "Nazwisko"}
+                  label={isLanguageEnglish ? "Last Name" : "姓氏"}
                   handleChange={handleChange}
                   half
                 />
                 <Input
                   name="userType"
-                  label={isLanguageEnglish ? "User type" : "Rodzaj konta"}
+                  label={isLanguageEnglish ? "User type (Teacher or Student)" : "使用者類別 (Teacher or Student)"}
                   handleChange={handleChange}
                 />
                 <Input
                   name="mail"
-                  label={isLanguageEnglish ? "Email address" : "Email"}
+                  label={isLanguageEnglish ? "Email address" : "電子郵件"}
                   handleChange={handleChange}
                   type="email"
                 />
@@ -100,12 +100,12 @@ function Auth() {
 
             <Input
               name="userName"
-              label={isLanguageEnglish ? "User Name" : "Nazwa użytkownika"}
+              label={isLanguageEnglish ? "User Name" : "帳號名稱"}
               handleChange={handleChange}
             />
             <Input
               name="password"
-              label={isLanguageEnglish ? "Password" : "Hasło"}
+              label={isLanguageEnglish ? "Password" : "密碼"}
               handleChange={handleChange}
               type={showPassword ? "text" : "password"}
               handleShowPassword={handleShowPassword}
@@ -113,7 +113,7 @@ function Auth() {
             {isSignup && (
               <Input
                 name="confirmPassword"
-                label={isLanguageEnglish ? "Repeat password" : "Powtórz hasło"}
+                label={isLanguageEnglish ? "Repeat password" : "確認密碼"}
                 handleChange={handleChange}
                 type="password"
               />
@@ -129,10 +129,10 @@ function Auth() {
             {isSignup
               ? isLanguageEnglish
                 ? "Sign up"
-                : "Zarejestruj się"
+                : "註冊"
               : isLanguageEnglish
               ? "Sign in"
-              : "Zaloguj się"}
+              : "登入"}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
@@ -140,10 +140,10 @@ function Auth() {
                 {isSignup
                   ? isLanguageEnglish
                     ? "Already have an account? Sign in"
-                    : "Masz już konto? Zaloguj się"
+                    : "你已經有了帳號嗎？登入"
                   : isLanguageEnglish
                   ? "Don't have an account? Sign Up"
-                  : "Nie masz konta? Zarejestruj się"}
+                  : "你還沒有這個玩過嗎？請務必試試看"}
               </Button>
             </Grid>
           </Grid>

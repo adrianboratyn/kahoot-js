@@ -70,7 +70,7 @@ function Quizes() {
           label={
             isLanguageEnglish
               ? "Search quizes by name"
-              : "Szukaj quizów po nazwie"
+              : "用名稱搜尋題組"
           }
           fullWidth
           value={search}
@@ -84,7 +84,7 @@ function Quizes() {
           label={
             isLanguageEnglish
               ? "Search quizes by tags"
-              : "Szukaj quizów po kategoriach"
+              : "用標籤搜尋題組"
           }
           variant="outlined"
         />
@@ -94,7 +94,7 @@ function Quizes() {
           variant="contained"
           color="primary"
         >
-          {isLanguageEnglish ? "Search" : "Szukaj"}
+          {isLanguageEnglish ? "Search" : "搜尋"}
         </Button>
       </AppBar>
       {isLoading ? (

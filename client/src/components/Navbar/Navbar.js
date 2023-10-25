@@ -45,21 +45,21 @@ function Navbar() {
               </Link>
             </li>
             <li className={styles["nav__list-item"]}>
-              {isLanguageEnglish ? "About" : "O nas"}
+              {isLanguageEnglish ? "About" : "關於"}
               <ul className={styles["nav__list-item-drop"]}>
-                <li>{isLanguageEnglish ? "How it works" : "Jak to działa"} </li>
-                <li>{isLanguageEnglish ? "Ways to play" : "Sposoby na grę"}</li>
+                <li>{isLanguageEnglish ? "How it works" : "如何運作"} </li>
+                <li>{isLanguageEnglish ? "Ways to play" : "如何遊玩"}</li>
               </ul>
             </li>
             <li className={styles["nav__list-item"]}>
-              {isLanguageEnglish ? "Study" : "Ucz się"}
+              {isLanguageEnglish ? "Study" : "學習"}
               <ul className={styles["nav__list-item-drop"]}>
                 <li>
                   <Link to="/quizes">
-                    {isLanguageEnglish ? "Public quizes" : "Publiczne quizy"}
+                    {isLanguageEnglish ? "Public quizes" : "公開測驗"}
                   </Link>
                 </li>
-                <li>{isLanguageEnglish ? "Test game" : "Przetestuj grę"}</li>
+                <li>{isLanguageEnglish ? "Test game" : "體驗測試遊戲"}</li>
               </ul>
             </li>
           </ul>
@@ -67,20 +67,20 @@ function Navbar() {
         <div className={styles["menu-left"]}>
           <ul className={styles.nav__list}>
             <li className={styles["nav__list-item"]}>
-              {isLanguageEnglish ? "Contact" : "Kontakt"}
+              {isLanguageEnglish ? "Contact" : "聯繫"}
             </li>
 
             {user ? (
               <>
                   <li className={styles["nav__list-item"]}>
                   <Link to="/games/joingame">
-                    {isLanguageEnglish ? "Play" : "Graj"}
+                    {isLanguageEnglish ? "Play" : "遊戲大廳"}
                   </Link>
                 </li>
                 {user.result.userType === "Teacher" && (
                   <li className={styles["nav__list-item"]}>
                     <Link to="/myquizes">
-                      {isLanguageEnglish ? "My Quizes" : "Moje Quizy"}
+                      {isLanguageEnglish ? "My Quizes" : "我的題組"}
                     </Link>
                   </li>
                 )}
@@ -88,24 +88,24 @@ function Navbar() {
                   {user.result.firstName}
                 </li>
                 <li onClick={logout} className={styles["nav__list-item"]}>
-                  {isLanguageEnglish ? "Log out" : "Wyloguj"}
+                  {isLanguageEnglish ? "Log out" : "登出"}
                 </li>
               </>
             ) : (
               <Link to="/auth" className={styles["nav__list-item"]}>
-                {isLanguageEnglish ? "Log in" : "Zaloguj"}
+                {isLanguageEnglish ? "Log in" : "登入"}
               </Link>
             )}
             <li className={styles["nav__list-item"]}>
               <img src={globe} alt="" />
-              {isLanguageEnglish ? "EN" : "PL"}
+              {isLanguageEnglish ? "EN" : "繁體中文"}
               <ul className={styles["nav__list-item-drop"]}>
                 <li
                   onClick={() => {
                     dispatch(changeLanguage(!isLanguageEnglish))
                   }}
                 >
-                  {isLanguageEnglish ? "Polski" : "English"}
+                  {isLanguageEnglish ? "繁體中文" : "English"}
                 </li>
               </ul>
             </li>
