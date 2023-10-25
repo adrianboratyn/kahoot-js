@@ -127,11 +127,11 @@ function QuizCreator() {
 
   const handleQuestionSubmit = () => {
     if (questionData.question === "") {
-      alert("Wpisz treść pytania")
+      alert("Enter your question")
     } else if (!validateAnswerFields()) {
-      alert("Wpisz treść odpowiedzi")
+      alert("Write the content of the answer")
     } else if (!validateCorrectAnswer()) {
-      alert("Wybierz poprawną odpowiedź")
+      alert("Choose the correct answer")
     } else {
       setIsQuestionDataSave(true)
       // if true it means question already exist and is only updated

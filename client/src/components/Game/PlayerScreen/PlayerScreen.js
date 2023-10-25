@@ -191,7 +191,7 @@ function PlayerScreen() {
           <CircularProgress />
         </div>
       )}
-      {isResultScreen && (
+      {isResultScreen && result && (
         <div
           className={styles["question-preview"]}
           style={{ backgroundColor: result.points > 0 ? "green" : "red" }}
