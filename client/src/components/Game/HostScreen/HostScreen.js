@@ -168,7 +168,7 @@ function HostScreen() {
         <div className={styles.lobby}>
           <WaitingRoom pin={game?.pin} socket={socket} />
           <button onClick={startGame}>
-            {isLanguageEnglish ? "Start a game" : "Rozpocznij grę"}
+            {isLanguageEnglish ? "Start a game" : "開始遊戲"}
           </button>
         </div>
       )}

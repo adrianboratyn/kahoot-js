@@ -276,7 +276,7 @@ function QuizCreator() {
             className={styles["quiz-info-button"]}
             onClick={showQuizOptions}
           >
-            {isLanguageEnglish ? "Settings" : "Ustawienia"}
+            {isLanguageEnglish ? "Settings" : "設置"}
           </button>
         </div>
         <div className={styles["question-list-container"]}>
@@ -300,12 +300,12 @@ function QuizCreator() {
                 : alert(
                     isLanguageEnglish
                       ? "Save changes in question data first"
-                      : "Zapisz najpierw zmiany w pytaniu"
+                      : "請先儲存"
                   )
             }}
             className={styles["add-question-button"]}
           >
-            {isLanguageEnglish ? "Add question" : "Dodaj pytanie"}
+            {isLanguageEnglish ? "Add question" : "新增問題"}
           </button>
         </div>
       </div>
@@ -318,7 +318,7 @@ function QuizCreator() {
           placeholder={
             isLanguageEnglish
               ? "Write your question here"
-              : "Zacznij wpisywać swoje pytanie"
+              : "請寫下你的問題"
           }
           className={styles["question-name"]}
         />
@@ -326,7 +326,7 @@ function QuizCreator() {
           <h3>
             {isLanguageEnglish
               ? "Find and upload an image"
-              : "Znajdź i wstaw zdjęcie"}
+              : "上傳圖片"}
           </h3>
           <div>
             <FileBase
@@ -357,7 +357,7 @@ function QuizCreator() {
                   : alert(
                       isLanguageEnglish
                         ? "You already choose the correct answer"
-                        : "Wybrałeś już poprawną odpowiedź"
+                        : "您已經選擇了正確答案"
                     )
               }}
               isAnswerCorrect={questionData.answerList[0].isCorrect}
@@ -380,7 +380,7 @@ function QuizCreator() {
                   : alert(
                       isLanguageEnglish
                         ? "You already choose the correct answer"
-                        : "Wybrałeś już poprawną odpowiedź"
+                        : "您已經選擇了正確答案"
                     )
               }}
               isAnswerCorrect={questionData.answerList[1].isCorrect}
@@ -403,7 +403,7 @@ function QuizCreator() {
                       : alert(
                           isLanguageEnglish
                             ? "You already choose the correct answer"
-                            : "Wybrałeś już poprawną odpowiedź"
+                            : "您已經選擇了正確答案"
                         )
                   }}
                   isAnswerCorrect={questionData.answerList[2].isCorrect}
@@ -424,7 +424,7 @@ function QuizCreator() {
                       : alert(
                           isLanguageEnglish
                             ? "You already choose the correct answer"
-                            : "Wybrałeś już poprawną odpowiedź"
+                            : "您已經選擇了正確答案"
                         )
                   }}
                   isAnswerCorrect={questionData.answerList[3].isCorrect}
@@ -442,7 +442,7 @@ function QuizCreator() {
         >
           <h1>Quiz</h1>
           <div className={styles["option-label"]}>
-            <label>{isLanguageEnglish ? "Title" : "Nazwa"}</label>
+            <label>{isLanguageEnglish ? "Title" : "標題"}</label>
           </div>
           <input
             value={quizData.name}
@@ -451,7 +451,7 @@ function QuizCreator() {
             onChange={handleQuizChange}
           />
           <div className={styles["option-label"]}>
-            <label>{isLanguageEnglish ? "Description" : "Opis"}</label>
+            <label>{isLanguageEnglish ? "Description" : "描述"}</label>
           </div>
           <input
             value={quizData.description}
@@ -461,7 +461,7 @@ function QuizCreator() {
           />
           <div className={styles["option-label"]}>
             <label>
-              {isLanguageEnglish ? "Points per question" : "Punkty za pytanie"}
+              {isLanguageEnglish ? "Points per question" : "每題得分"}
             </label>
           </div>
           <input
@@ -472,7 +472,7 @@ function QuizCreator() {
             onChange={handleQuizChange}
           />
           <div className={styles["option-label"]}>
-            <label>{isLanguageEnglish ? "Access" : "Dostępność quizu"}</label>
+            <label>{isLanguageEnglish ? "Access" : "儲存方式"}</label>
           </div>
           <div>
             <button
@@ -486,7 +486,7 @@ function QuizCreator() {
                 color: isQuizPublic ? "white" : "rgb(110, 110, 110)",
               }}
             >
-              {isLanguageEnglish ? "Public" : "Publiczny"}
+              {isLanguageEnglish ? "Public" : "公開"}
             </button>
             <button
               onClick={() => {
@@ -499,12 +499,12 @@ function QuizCreator() {
                 color: isQuizPublic ? "rgb(110, 110, 110)" : "white",
               }}
             >
-              {isLanguageEnglish ? "Private" : "Prywatny"}
+              {isLanguageEnglish ? "Private" : "私人"}
             </button>
           </div>
           <div className={styles["option-label"]}>
             <label>
-              {isLanguageEnglish ? "Background Image" : "Zdjęcie w tle"}
+              {isLanguageEnglish ? "Background Image" : "背景圖片"}
             </label>
           </div>
           <div>
@@ -524,7 +524,7 @@ function QuizCreator() {
             <label>
               {isLanguageEnglish
                 ? "Tags (comma separated)"
-                : "Tagi (oddzielaj przecinkiem)"}
+                : "標籤 (用英文逗號分隔)"}
             </label>
           </div>
           <input
@@ -540,7 +540,7 @@ function QuizCreator() {
               className={styles["option-button"]}
               onClick={handleQuizSubmit}
             >
-              {isLanguageEnglish ? "Submit" : "Zakończ tworzenie quizu"}
+              {isLanguageEnglish ? "Submit" : "提交"}
             </button>
           </div>
         </div>
@@ -552,7 +552,7 @@ function QuizCreator() {
             <div className={styles["option-label"]}>
               <img src={questionType} alt="" />
               <label>
-                {isLanguageEnglish ? "Question type" : "Typ pytania"}
+                {isLanguageEnglish ? "Question type" : "問題類別"}
               </label>
             </div>
             <select
@@ -570,14 +570,14 @@ function QuizCreator() {
               </option>
               <option value="Quiz">Quiz</option>
               <option value="True/False">
-                {isLanguageEnglish ? "True/False" : "Prawda/Fałsz"}
+                {isLanguageEnglish ? "True/False" : "對/錯"}
               </option>
             </select>
           </div>
           <div className={styles.option}>
             <div className={styles["option-label"]}>
               <img src={timer} alt="" />
-              <label>{isLanguageEnglish ? "Time limit" : "Limit czasu"}</label>
+              <label>{isLanguageEnglish ? "Time limit" : "時間限制"}</label>
             </div>
             <select
               onChange={handleQuestionChange}
@@ -585,32 +585,32 @@ function QuizCreator() {
               value={questionData.answerTime}
             >
               <option defaultValue disabled>
-                {isLanguageEnglish ? "Set time limit" : "Ustaw limit czasu"}
+                {isLanguageEnglish ? "Set time limit" : "設置時間限制"}
               </option>
               <option value={5}>
-                5 {isLanguageEnglish ? "seconds" : "sekund"}
+                5 {isLanguageEnglish ? "seconds" : "秒"}
               </option>
               <option value={10}>
-                10 {isLanguageEnglish ? "seconds" : "sekund"}
+                10 {isLanguageEnglish ? "seconds" : "秒"}
               </option>
               <option value={20}>
-                20 {isLanguageEnglish ? "seconds" : "sekund"}
+                20 {isLanguageEnglish ? "seconds" : "秒"}
               </option>
               <option value={30}>
-                30 {isLanguageEnglish ? "seconds" : "sekund"}
+                30 {isLanguageEnglish ? "seconds" : "秒"}
               </option>
               <option value={60}>
-                1 {isLanguageEnglish ? "minute" : "minuta"}
+                1 {isLanguageEnglish ? "minute" : "秒"}
               </option>
               <option value={90}>
-                1,5 {isLanguageEnglish ? "minute" : "minuty"}
+                1,5 {isLanguageEnglish ? "minute" : "秒"}
               </option>
             </select>
           </div>
           <div className={styles.option}>
             <div className={styles["option-label"]}>
               <img src={gamePoints} alt="" />
-              <label>{isLanguageEnglish ? "Points" : "Punkty"}</label>
+              <label>{isLanguageEnglish ? "Points" : "分數"}</label>
             </div>
             <select
               onChange={handleQuestionChange}
@@ -624,7 +624,7 @@ function QuizCreator() {
               </option>
               <option value="Standard">Standard</option>
               <option value="Double">
-                {isLanguageEnglish ? "Double" : "Podwójna ilość"}
+                {isLanguageEnglish ? "Double" : "雙倍"}
               </option>
               <option value="BasedOnTime">
                 {isLanguageEnglish
@@ -637,20 +637,20 @@ function QuizCreator() {
             <div className={styles["option-label"]}>
               <img src={answerOptions} alt="" />
               <label>
-                {isLanguageEnglish ? "Answer options" : "Opcje odpowiedzi"}
+                {isLanguageEnglish ? "Answer options" : "答案選項"}
               </label>
             </div>
             <select onChange={changeMaxCorrectAnswerCount}>
               <option defaultValue disabled value="1">
                 {isLanguageEnglish
                   ? "Set answer options"
-                  : "Wybierz opcje odpowiedzi"}
+                  : "設置答案類型"}
               </option>
               <option value="1">
-                {isLanguageEnglish ? "Single choice" : "Pojedynczy wybór"}
+                {isLanguageEnglish ? "Single choice" : "單選題"}
               </option>
               <option value="4">
-                {isLanguageEnglish ? "Multiple choice" : "Wielokrotny wybór"}
+                {isLanguageEnglish ? "Multiple choice" : "複選題"}
               </option>
             </select>
           </div>
@@ -659,13 +659,13 @@ function QuizCreator() {
               onClick={handleQuestionSubmit}
               className={styles["option-button"]}
             >
-              {isLanguageEnglish ? "Save changes" : "Zapisz zmiany"}
+              {isLanguageEnglish ? "Save changes" : "儲存"}
             </button>
             <button
               onClick={handleQuestionRemove}
               className={styles["option-button"]}
             >
-              {isLanguageEnglish ? "Delete" : "Usuń"}
+              {isLanguageEnglish ? "Delete" : "刪除題組"}
             </button>
           </div>
         </div>
