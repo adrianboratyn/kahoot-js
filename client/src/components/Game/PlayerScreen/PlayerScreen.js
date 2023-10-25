@@ -187,7 +187,7 @@ function PlayerScreen() {
       )}
       {isQuestionAnswered && (
         <div className={styles["question-preview"]}>
-          <h1>{isLanguageEnglish ? "Wait for a result" : "Czekaj na wynik"}</h1>
+          <h1>{isLanguageEnglish ? "Wait for a result" : "等待結果"}</h1>
           <CircularProgress />
         </div>
       )}
@@ -196,18 +196,18 @@ function PlayerScreen() {
           className={styles["question-preview"]}
           style={{ backgroundColor: result.points > 0 ? "green" : "red" }}
         >
-          <h1>{isLanguageEnglish ? "Result" : "Wynik"}</h1>
+          <h1>{isLanguageEnglish ? "Result" : "結果"}</h1>
           <h3>
             {result.points > 0
               ? isLanguageEnglish
                 ? "Correct"
-                : "Dobrze"
+                : "賓果！"
               : isLanguageEnglish
               ? "Wrong"
-              : "Źle"}
+              : "錯誤！"}
           </h3>
           <h3>
-            {isLanguageEnglish ? "Points: " : "Punkty: "} {result.points}
+            {isLanguageEnglish ? "Points: " : "分數: "} {result.points}
           </h3>
         </div>
       )}

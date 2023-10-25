@@ -192,7 +192,7 @@ function HostScreen() {
         <div className={styles["question-preview"]}>
           <div className={styles["leaderboard"]}>
             <h1 className={styles["leaderboard-title"]}>
-              {isLanguageEnglish ? "Question result" : "Wynik pytania"}
+              {isLanguageEnglish ? "Question result" : "遊戲結果"}
             </h1>
             <ol>
               {questionResult.questionResultList.map((player) => (
@@ -213,7 +213,7 @@ function HostScreen() {
         <div className={styles["question-preview"]}>
           <div className={styles["leaderboard"]}>
             <h1 className={styles["leaderboard-title"]}>
-              {isLanguageEnglish ? "Leaderboard" : "Tablica wyników"}
+              {isLanguageEnglish ? "Leaderboard" : "排行榜"}
             </h1>
             <ol>
               {currentLeaderboard.leaderboardList.map((player) => (
