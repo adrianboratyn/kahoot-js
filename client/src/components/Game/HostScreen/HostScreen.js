@@ -72,6 +72,7 @@ function HostScreen() {
   }, [socket])
 
   const updateLeaderboard = async (data, id, score) => {
+    console.log("5. updateLeaderboard")
     let question = await dispatch(updateQuestionLeaderboard(data, id))
     setQuestionResult(question.questionLeaderboard[data.questionIndex - 1])
     let leaderboardData = {
@@ -88,6 +89,7 @@ function HostScreen() {
   }
 
   const startGame = () => {
+    console.log("1. startGame")
     socket.emit("start-game", quiz)
     socket.emit("question-preview", () => {
       startPreviewCountdown(5, currentQuestionIndex)
@@ -97,6 +99,7 @@ function HostScreen() {
   }
 
   const startPreviewCountdown = (seconds, index) => {
+    console.log("2. startPreviewCountdown")
     setIsLeaderboardScreen(false)
     setIsPreviewScreen(true)
     let time = seconds
@@ -113,6 +116,7 @@ function HostScreen() {
   }
 
   const startQuestionCountdown = (seconds, index) => {
+    console.log("4. startQuestionCountdown")
     let time = seconds
     let interval = setInterval(() => {
       setTimer(time)
@@ -124,6 +128,7 @@ function HostScreen() {
     }, 1000)
   }
   const displayQuestionResult = (index) => {
+    console.log("6. displayQuestionResult")
     setIsQuestionScreen(false)
     setIsQuestionResultScreen(true)
     setTimeout(() => {
@@ -132,6 +137,7 @@ function HostScreen() {
   }
 
   const displayCurrentLeaderBoard = (index) => {
+    console.log("7. displayCurrentLeaderBoard")
     setIsQuestionResultScreen(false)
     setIsLeaderboardScreen(true)
     setTimeout(() => {
@@ -145,6 +151,7 @@ function HostScreen() {
   }
 
   const displayQuestion = (index) => {
+    console.log("3. displayQuestion")
     if (index === quiz.questionList.length) {
       displayCurrentLeaderBoard(index)
     } else {
@@ -215,7 +222,7 @@ function HostScreen() {
         <div className={styles["question-preview"]}>
           <div className={styles["leaderboard"]}>
             <h1 className={styles["leaderboard-title"]}>
-              {isLanguageEnglish ? "Leaderboard" : "排行榜"}
+              {isLanguageEnglish ? "Leaderboard" : "遊戲排行榜"}
             </h1>
             <ol>
               {currentLeaderboard.leaderboardList.map((player) => (
