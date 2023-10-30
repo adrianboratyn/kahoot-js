@@ -135,10 +135,12 @@ function HostScreen() {
     setIsQuestionResultScreen(false)
     setIsLeaderboardScreen(true)
     setTimeout(() => {
-      socket.emit("question-preview", () => {
-        startPreviewCountdown(5, index)
-        setPlayerList([])
-      })
+      if (index < quiz.questionList.length) {
+        socket.emit("question-preview", () => {
+          startPreviewCountdown(5, index)
+          setPlayerList([])
+        })
+      }
     }, 5000)
   }
 
