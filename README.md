@@ -1,3 +1,9 @@
+## Archived Repository Notice
+
+> ⚠️ **This repository has been archived and is no longer actively maintained.**
+
+You can still clone and use this repository, but no further updates, issues or pull requests will be addressed.
+
 # Kahoot-JS
 
 Watch the YouTube video to see how it works
